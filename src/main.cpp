@@ -1,15 +1,17 @@
-// Die ISS-Box — Stage 1: toolchain check (blink + printf over USB)
+// Die ISS-Box — Stage 2: I2C bus scan
 //
-// Verifies the build works end to end before any peripheral is wired:
-//   - the onboard LED blinks
-//   - printf reaches the host over USB CDC
+// Rescans every few seconds, so modules can be plugged and unplugged while
+// watching the console. The onboard LED keeps blinking as a liveness signal.
 
 #include <cstdio>
-#include "pico/stdlib.h"
-#include "pico/cyw43_arch.h"
-#include "hardware/clocks.h"
 
-// On Pico 2 W the onboard LED is driven by the wireless chip, not by a GPIO,
+#include "board_config.hpp"
+#include "hardware/clocks.h"
+#include "pico/cyw43_arch.h"
+#include "pico/stdlib.h"
+#include "tools/i2c_scan.hpp"
+
+// On Pico W the onboard LED is driven by the wireless chip, not by a GPIO,
 // so cyw43_arch has to be up before the LED will do anything.
 static bool led_init() {
     return cyw43_arch_init() == 0;
@@ -28,6 +30,17 @@ static void wait_for_console(uint32_t timeout_ms = 3000) {
     }
 }
 
+// Blink for the given time so the board visibly stays alive between scans.
+static void blink_for(uint32_t total_ms) {
+    absolute_time_t deadline = make_timeout_time_ms(total_ms);
+    while (!time_reached(deadline)) {
+        led_set(true);
+        sleep_ms(100);
+        led_set(false);
+        sleep_ms(900);
+    }
+}
+
 int main() {
     stdio_init_all();
     wait_for_console();
@@ -40,19 +53,14 @@ int main() {
         }
     }
 
-    printf("\n=== ISS-Box Stage 1 ===\n");
+    printf("\n=== ISS-Box Stage 2 ===\n");
     printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
     printf("sys clock: %u kHz\n", clock_get_hz(clk_sys) / 1000);
 
-    uint32_t ticks = 0;
-    while (true) {
-        led_set(true);
-        sleep_ms(100);
-        led_set(false);
-        sleep_ms(900);
+    tools::i2c_bus_init();
 
-        printf("alive %lu (%.1f s)\n",
-               (unsigned long)++ticks,
-               to_ms_since_boot(get_absolute_time()) / 1000.0f);
+    while (true) {
+        tools::i2c_scan();
+        blink_for(5000);
     }
 }

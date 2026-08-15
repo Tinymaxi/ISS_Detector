@@ -31,6 +31,7 @@ pico_sdk_init()
 
 add_executable(iss_box
     src/main.cpp
+    src/tools/i2c_scan.cpp
 )
 
 pico_set_program_name(iss_box "iss_box")
@@ -44,6 +45,7 @@ pico_enable_stdio_usb(iss_box 1)
 target_link_libraries(iss_box
     pico_stdlib
     pico_cyw43_arch_none      # onboard LED lives on the wireless chip; no networking yet
+    hardware_i2c
 )
 
 target_include_directories(iss_box PRIVATE
