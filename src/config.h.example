@@ -1,0 +1,26 @@
+// Copy this file to src/config.h and fill in the real values.
+//
+//   cp src/config.h.example src/config.h
+//
+// src/config.h is gitignored on purpose: it holds WiFi credentials and the
+// home location of a child. Neither belongs in a repository.
+
+#pragma once
+
+// --- WiFi (Stage 10) -------------------------------------------------------
+#define WIFI_SSID       "your-network"
+#define WIFI_PASSWORD   "your-password"
+
+// --- Home location (Stage 11/12) -------------------------------------------
+// Where the ISS compass points relative to. Town-centre precision is plenty.
+#define HOME_LATITUDE    46.9480    // degrees north, negative for south
+#define HOME_LONGITUDE    7.4474    // degrees east,  negative for west
+
+// --- Timezone (Stage 10) ---------------------------------------------------
+// Offset from UTC in hours, before DST. DST itself is computed in code.
+#define HOME_UTC_OFFSET  1
+
+// --- Tuning ----------------------------------------------------------------
+// Elevation above the horizon, in degrees, at which the box interrupts
+// whatever it is doing and announces an ISS pass.
+#define ISS_ALERT_ELEVATION_DEG  10.0

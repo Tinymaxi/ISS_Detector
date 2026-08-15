@@ -1,0 +1,7 @@
+build/
+.DS_Store
+
+# Secrets — never commit these.
+# WiFi credentials and the home coordinates the ISS compass points relative to.
+# Copy src/config.h.example to src/config.h and fill it in locally.
+src/config.h

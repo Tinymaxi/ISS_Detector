@@ -1,0 +1,57 @@
+# Die ISS-Box
+
+A birthday present for a five-year-old: one box, four modes, driven by a big arcade button
+and a knob.
+
+| Mode | NeoPixel ring (24 px) | NeoPixel 7-segment | LCD |
+|---|---|---|---|
+| **UHR** | 24-hour dial | `HH:MM`, NTP-synced | date + weekday |
+| **ISS** | compass pointing at the space station | distance in km | ground position |
+| **WETTER** | thermometer arc, blue → red | temperature | temp + humidity |
+| **PUPS** | countdown, then a 0–24 bar graph | score 0–99 | verdict |
+
+The ring is the centrepiece: 24 pixels divide 360° into exactly 15° each, so with a north arrow
+marked on the case, the lit pixel genuinely points at the ISS. Colour carries elevation — deep blue
+when it's on the far side of the planet, blazing white when it's overhead.
+
+Whatever mode the box is in, it interrupts itself when the ISS actually rises above the horizon:
+buzzer, ring flash, and an automatic switch to ISS mode.
+
+## Hardware
+
+Raspberry Pi Pico 2 W (RP2350), C++17 on the Pico SDK.
+
+| Function | GPIO | Pin |
+|---|---|---|
+| NeoPixel data (ring + 7-seg chained) | GP2 | 4 |
+| I2C0 SDA / SCL (SHT3x + LCD) | GP4 / GP5 | 6 / 7 |
+| Rotary encoder SW / A / B | GP13 / GP14 / GP15 | 17 / 19 / 20 |
+| Arcade button / lamp | GP16 / GP17 | 21 / 22 |
+| Buzzer | GP18 | 24 |
+| MiCS-5524 `EN` / `A0` | GP19 / GP26 | 25 / 31 |
+
+Peripherals: SHT3x/4x temp+humidity, DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
+32-pixel NeoPixel seven-segment, MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
+
+Powered from a 5 V Raspberry Pi supply via an Adafruit 4090 USB-C breakout. Pixel brightness is
+clamped in software against a current budget — 56 pixels at full white would pull ~3.4 A.
+
+## Building
+
+```bash
+./go.sh                # build
+./go.sh flash          # build and load onto the board
+./go.sh flash monitor  # ...and open the serial console
+```
+
+First flash needs `BOOTSEL` held while plugging in USB. After that the firmware exposes a reset
+interface and `picotool` reboots the board itself.
+
+## Configuration
+
+```bash
+cp src/config.h.example src/config.h
+```
+
+`src/config.h` holds WiFi credentials and the home coordinates the ISS compass points relative to.
+It is gitignored and must stay that way.
