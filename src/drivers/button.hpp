@@ -35,18 +35,29 @@ public:
     // grown-up settings mode a child will not stumble into.
     bool take_long_press(uint32_t hold_ms = 1500);
 
+    // The lamp runs on PWM rather than plain on/off, so it can breathe when
+    // the box is idle. A softly pulsing button reads as "press me" to a small
+    // child in a way a static light does not, and this is the one control they
+    // are meant to find.
     void set_lamp(bool on);
-    bool lamp_on() const { return lamp_on_; }
+    void set_lamp_brightness(uint8_t level);  // 0-255, gamma-corrected
+    uint8_t lamp_brightness() const { return lamp_level_; }
+
+    // Advances a slow sine breath. Call each loop; period_ms is one full
+    // in-and-out cycle.
+    void breathe_lamp(uint32_t period_ms = 2600, uint8_t min_level = 12,
+                      uint8_t max_level = 200);
 
 private:
     uint pin_;
     uint lamp_pin_;
 
-    bool pressed_ = false;
-    bool raw_last_ = false;
-    bool click_pending_ = false;
-    bool long_press_fired_ = false;
-    bool lamp_on_ = false;
+    bool    pressed_ = false;
+    bool    raw_last_ = false;
+    bool    click_pending_ = false;
+    bool    long_press_fired_ = false;
+    uint8_t lamp_level_ = 0;
+    uint    lamp_slice_ = 0;
 
     absolute_time_t last_change_{};
     absolute_time_t pressed_since_{};

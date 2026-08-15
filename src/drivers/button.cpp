@@ -1,6 +1,9 @@
 #include "drivers/button.hpp"
 
+#include <cmath>
+
 #include "hardware/gpio.h"
+#include "hardware/pwm.h"
 
 namespace drivers {
 namespace {
@@ -19,9 +22,15 @@ void Button::init() {
     gpio_pull_up(pin_);
 
     if (lamp_pin_ != kNoLamp) {
-        gpio_init(lamp_pin_);
-        gpio_set_dir(lamp_pin_, GPIO_OUT);
-        gpio_put(lamp_pin_, 0);
+        gpio_set_function(lamp_pin_, GPIO_FUNC_PWM);
+        lamp_slice_ = pwm_gpio_to_slice_num(lamp_pin_);
+        pwm_config cfg = pwm_get_default_config();
+        // 8-bit wrap at ~1 kHz: fast enough that no one sees flicker, slow
+        // enough that a switching transistor stays comfortably in its depth.
+        pwm_config_set_clkdiv(&cfg, 488.0f);
+        pwm_config_set_wrap(&cfg, 255);
+        pwm_init(lamp_slice_, &cfg, true);
+        pwm_set_gpio_level(lamp_pin_, 0);
     }
 
     raw_last_ = pressed_ = false;
@@ -63,9 +72,26 @@ bool Button::take_long_press(uint32_t hold_ms) {
     return true;
 }
 
-void Button::set_lamp(bool on) {
-    lamp_on_ = on;
-    if (lamp_pin_ != kNoLamp) gpio_put(lamp_pin_, on);
+void Button::set_lamp(bool on) { set_lamp_brightness(on ? 255 : 0); }
+
+void Button::set_lamp_brightness(uint8_t level) {
+    lamp_level_ = level;
+    if (lamp_pin_ == kNoLamp) return;
+    // Same reasoning as the NeoPixels: LED output is linear in duty cycle but
+    // the eye is not, so without gamma a "breath" spends most of its time
+    // looking fully lit.
+    const uint16_t duty = static_cast<uint16_t>(
+        powf(static_cast<float>(level) / 255.0f, 2.2f) * 255.0f + 0.5f);
+    pwm_set_gpio_level(lamp_pin_, duty);
+}
+
+void Button::breathe_lamp(uint32_t period_ms, uint8_t min_level, uint8_t max_level) {
+    const uint32_t now = to_ms_since_boot(get_absolute_time()) % period_ms;
+    const float    phase = static_cast<float>(now) / static_cast<float>(period_ms);
+    // Raised cosine: starts dim, swells, falls back, with no discontinuity at
+    // the wrap point.
+    const float    wave = 0.5f - 0.5f * cosf(phase * 2.0f * 3.14159265f);
+    set_lamp_brightness(static_cast<uint8_t>(min_level + wave * (max_level - min_level)));
 }
 
 }  // namespace drivers

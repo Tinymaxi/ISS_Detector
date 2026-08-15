@@ -110,8 +110,15 @@ int main() {
             dirty = true;
         }
 
-        // Lamp follows the sound, so the button glows while it sings.
-        button.set_lamp(buzzer.is_playing());
+        // Lamp: solid while held, full while a tune plays, otherwise a slow
+        // breath inviting a press.
+        if (button.is_pressed()) {
+            button.set_lamp_brightness(255);
+        } else if (buzzer.is_playing()) {
+            button.set_lamp_brightness(255);
+        } else {
+            button.breathe_lamp();
+        }
 
         if (frame % 20 == 0) {  // ~25 fps at a 2 ms poll
             ring.clear();
