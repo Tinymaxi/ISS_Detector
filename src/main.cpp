@@ -65,14 +65,19 @@ int main() {
     drivers::Buzzer buzzer(board::PIN_BUZZER);
     buzzer.init();
 
-    // 10k from A0 to the ADC pin; 10k + 4.7k + 470 in series to ground.
+    // 10k from A0 to the ADC pin; 10k + 4.7k + 470 + 470 in series to ground.
     //
-    // That puts 5 V at 3.01 V, using 91% of the ADC range. The remaining
-    // headroom is not waste: USB may legitimately supply up to 5.25 V, which
-    // would put this at 3.16 V — still under the 3.3 V rail. A divider tuned
-    // to use the last few percent would clip on a hot USB port.
+    // Sized for the actual supply, not a round number. The official Raspberry
+    // Pi USB-C adapter regulates to 5.1 V — deliberately high to offset cable
+    // drop — with +/-5% tolerance, so up to about 5.36 V.
+    //
+    //   at 5.10 V nominal    -> 3.111 V   (94% of the ADC range)
+    //   at 5.36 V worst case -> 3.270 V   (still under the 3.3 V rail)
+    //
+    // A more aggressive divider reaching 3.26 V at nominal would clip above
+    // 5.16 V, which a healthy adapter running 1% high would reach.
     drivers::GasSensor gas(board::PIN_GAS_AO, board::GAS_ADC_CHANNEL, board::PIN_GAS_EN,
-                           10000.0f, 15170.0f);
+                           10000.0f, 15640.0f);
     gas.init();
     printf("gas: A0 GP%u (ADC%u), EN GP%u, heater on\n", board::PIN_GAS_AO,
            board::GAS_ADC_CHANNEL, board::PIN_GAS_EN);
