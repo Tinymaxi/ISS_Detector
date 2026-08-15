@@ -12,12 +12,15 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
+# These must stay in step with CMakeLists.txt and .vscode/settings.json, so that
+# building from the shell and building from the VS Code button use one toolchain.
 PICO_SDK_TOOLS="$HOME/.pico-sdk"
 NINJA_VERSION="v1.13.2"
-TOOLCHAIN_VERSION="14_2_Rel1"
+TOOLCHAIN_VERSION="15_2_Rel1"
 PICOTOOL_VERSION="2.3.0"
+CMAKE_VERSION="v4.3.4"
 
-export PATH="$PICO_SDK_TOOLS/ninja/$NINJA_VERSION:$PICO_SDK_TOOLS/toolchain/$TOOLCHAIN_VERSION/bin:$PATH"
+export PATH="$PICO_SDK_TOOLS/ninja/$NINJA_VERSION:$PICO_SDK_TOOLS/toolchain/$TOOLCHAIN_VERSION/bin:$PICO_SDK_TOOLS/cmake/$CMAKE_VERSION/bin:$PATH"
 PICOTOOL="$PICO_SDK_TOOLS/picotool/$PICOTOOL_VERSION/picotool/picotool"
 
 do_flash=false
