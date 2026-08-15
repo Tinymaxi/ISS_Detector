@@ -24,7 +24,8 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 
 | Function | GPIO | Pin |
 |---|---|---|
-| NeoPixel data (ring + 7-seg chained) | GP2 | 4 |
+| NeoPixel ring data | GP2 | 4 |
+| NeoPixel digits data | GP3 | 5 |
 | I2C0 SDA / SCL (SHT3x + LCD) | GP4 / GP5 | 6 / 7 |
 | Rotary encoder SW / A / B | GP13 / GP14 / GP15 | 17 / 19 / 20 |
 | Arcade button / lamp | GP16 / GP17 | 21 / 22 |
@@ -32,7 +33,7 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 | MiCS-5524 `EN` / `A0` | GP19 / GP26 | 25 / 31 |
 
 Peripherals: SHT3x/4x temp+humidity, DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
-32-pixel NeoPixel seven-segment, MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
+32-pixel NeoPixel seven-segment (4 digits x 8 pixels, own data line), MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
 
 Powered from a 5 V Raspberry Pi supply via an Adafruit 4090 USB-C breakout. Pixel brightness is
 clamped in software against a current budget — 56 pixels at full white would pull ~3.4 A.

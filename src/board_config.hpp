@@ -9,13 +9,20 @@
 
 namespace board {
 
-// --- NeoPixels -------------------------------------------------------------
-// The 24-pixel ring and the 32-pixel seven-segment are chained on one data
-// line: ring DOUT -> seg DIN. Ring pixels come first in the frame buffer.
-constexpr uint PIN_NEOPIXEL   = 2;    // physical 4
-constexpr uint NEOPIXEL_RING  = 24;
-constexpr uint NEOPIXEL_SEG   = 32;
-constexpr uint NEOPIXEL_TOTAL = NEOPIXEL_RING + NEOPIXEL_SEG;
+// --- NeoPixels: two independent chains, one data pin each ------------------
+// Separate rather than chained. The ring animates at 25 fps while the digits
+// change once a second, so chaining would mean pushing 56 pixels every frame
+// to update 24 of them. It also keeps the breadboard wiring simpler and stops
+// a fault in one display taking out the other.
+constexpr uint PIN_RING    = 2;       // physical 4
+constexpr uint RING_PIXELS = 24;
+
+// Four digits of eight pixels: offsets 0-6 are segments a..g in order, offset
+// 7 is that digit's dot. Layout taken from the Siebensegment Uhr project.
+constexpr uint PIN_DIGITS        = 3;  // physical 5
+constexpr uint DIGIT_COUNT       = 4;
+constexpr uint PIXELS_PER_DIGIT  = 8;
+constexpr uint DIGIT_PIXELS      = DIGIT_COUNT * PIXELS_PER_DIGIT;  // 32
 
 // --- I2C: SHT3x/4x + DFR0464 LCD share one software-driven bus -------------
 constexpr uint PIN_I2C_SDA  = 4;      // physical 6

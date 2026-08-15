@@ -15,6 +15,19 @@ constexpr float kQuiescentMaPerPixel = 1.0f;
 
 constexpr float kGamma = 2.6f;
 
+// Both chains run the same PIO program, so it is loaded into a given PIO's
+// instruction memory once and the offset shared. Loading it per instance
+// would waste scarce instruction slots for no reason.
+int g_program_offset[NUM_PIOS] = {-1, -1};
+
+uint shared_program_offset(PIO pio) {
+    const uint idx = pio_get_index(pio);
+    if (g_program_offset[idx] < 0) {
+        g_program_offset[idx] = pio_add_program(pio, &ws2812_program);
+    }
+    return static_cast<uint>(g_program_offset[idx]);
+}
+
 }  // namespace
 
 NeoPixels::NeoPixels(uint pin, uint count, uint32_t current_budget_ma)
@@ -24,7 +37,7 @@ NeoPixels::NeoPixels(uint pin, uint count, uint32_t current_budget_ma)
 void NeoPixels::init(PIO pio) {
     pio_ = pio;
     sm_ = pio_claim_unused_sm(pio_, true);
-    offset_ = pio_add_program(pio_, &ws2812_program);
+    offset_ = shared_program_offset(pio_);
     ws2812_program_init(pio_, sm_, offset_, pin_, 800000, false);
 
     for (int i = 0; i < 256; i++) {
