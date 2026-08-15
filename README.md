@@ -30,10 +30,14 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 | Buzzer | GP9 | 12 |
 | Rotary encoder SW / CLK / DT | GP13 / GP14 / GP15 | 17 / 19 / 20 |
 | Arcade button / lamp | GP16 / GP17 | 21 / 22 |
+| MiCS-5524 `A0` / `EN` | GP26 / GP27 | 31 / 32 |
 
 The arcade lamp is a low-current LED with its own series resistor, driven straight from GP17 on
 PWM at 12 mA drive strength — no transistor needed.
-| MiCS-5524 `A0` / `EN` | GP26 / GP27 | 31 / 32 |
+
+The gas sensor runs at 5 V and its `A0` reaches the 3.3 V ADC through a divider: 10 k from `A0`,
+14.7 k (10 k + 4.7 k in series) to ground, giving 2.98 V at full scale — about 90% of the ADC
+range. A 100 nF cap from GP26 to AGND filters the sampling.
 
 Pins are spread deliberately: the final build is hand-soldered onto an Adafruit Mint Tin-Sized
 PermaProto, so unrelated signals get a free pin between them. Pins from the same module stay
@@ -42,8 +46,12 @@ adjacent, since they arrive as one bundle.
 Peripherals: SHT3x/4x temp+humidity, DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
 32-pixel NeoPixel seven-segment (4 digits x 8 pixels, own data line), MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
 
-Powered from a 5 V Raspberry Pi supply via an Adafruit 4090 USB-C breakout. Pixel brightness is
-clamped in software against a current budget — 56 pixels at full white would pull ~3.4 A.
+Powered entirely through the Pico's own USB connector — a USB-C Raspberry Pi supply with a
+USB-C-to-micro-USB cable. `VBUS` (pin 40) then distributes 5 V to the pixels and the gas sensor.
+One source means no back-feeding, so no Schottky diode and no separate USB breakout are needed.
+
+Pixel brightness is clamped in software against a current budget — 56 pixels at full white would
+pull ~3.4 A.
 
 ## Building
 
