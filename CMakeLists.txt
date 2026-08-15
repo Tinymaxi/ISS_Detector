@@ -34,6 +34,7 @@ add_executable(iss_box
     src/tools/i2c_scan.cpp
     src/drivers/soft_i2c.cpp
     src/drivers/i2c_bus.cpp
+    src/drivers/lcd1602_rgb.cpp
 )
 
 pico_set_program_name(iss_box "iss_box")

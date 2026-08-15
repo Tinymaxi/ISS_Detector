@@ -1,15 +1,17 @@
-// Die ISS-Box — Stage 2: I2C bus scan
+// Die ISS-Box — Stage 4: the LCD says hello
 //
-// Rescans every few seconds, so modules can be plugged and unplugged while
-// watching the console. The onboard LED keeps blinking as a liveness signal.
+// Scans the bus once, then drives the display: text on both lines, an uptime
+// counter proving it refreshes, and a backlight slowly working through the
+// colour wheel.
 
 #include <cstdio>
 
 #include "board_config.hpp"
+#include "drivers/i2c_bus.hpp"
+#include "drivers/lcd1602_rgb.hpp"
 #include "hardware/clocks.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
-#include "drivers/i2c_bus.hpp"
 #include "tools/i2c_scan.hpp"
 
 // On Pico W the onboard LED is driven by the wireless chip, not by a GPIO,
@@ -31,37 +33,54 @@ static void wait_for_console(uint32_t timeout_ms = 3000) {
     }
 }
 
-// Blink for the given time so the board visibly stays alive between scans.
-static void blink_for(uint32_t total_ms) {
-    absolute_time_t deadline = make_timeout_time_ms(total_ms);
-    while (!time_reached(deadline)) {
-        led_set(true);
-        sleep_ms(100);
-        led_set(false);
-        sleep_ms(900);
-    }
-}
-
 int main() {
     stdio_init_all();
     wait_for_console();
 
     if (!led_init()) {
-        // Nothing else can be trusted if the wireless chip did not come up.
         while (true) {
             printf("cyw43_arch_init() failed\n");
             sleep_ms(1000);
         }
     }
 
-    printf("\n=== ISS-Box Stage 2 ===\n");
+    printf("\n=== ISS-Box Stage 4 ===\n");
     printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
-    printf("sys clock: %u kHz\n", clock_get_hz(clk_sys) / 1000);
 
     drivers::i2c_bus().init();
+    tools::i2c_scan();
 
+    drivers::Lcd1602Rgb lcd(drivers::i2c_bus());
+    const bool lcd_ok = lcd.init();
+    if (!lcd_ok) {
+        printf("LCD did not acknowledge at 0x%02X\n", drivers::Lcd1602Rgb::kDefaultLcdAddr);
+    } else {
+        printf("LCD up.\n");
+    }
+
+    lcd.print_line(0, "Die ISS-Box");
+    lcd.print_line(1, "Hallo!");
+    sleep_ms(2000);
+
+    float    hue = 0.0f;
+    uint32_t seconds = 0;
     while (true) {
-        tools::i2c_scan();
-        blink_for(5000);
+        char line[17];
+        snprintf(line, sizeof(line), "laeuft seit %lus", (unsigned long)seconds);
+        lcd.print_line(1, line);
+
+        // A full turn of the colour wheel every 30 s.
+        lcd.set_backlight_hue(hue);
+        hue += 12.0f;
+
+        // Heartbeat on the console too, so a hung I2C transfer is obvious.
+        printf("t=%lus  hue=%3.0f  lcd=%s\n", (unsigned long)seconds, (double)hue,
+               lcd_ok ? "ok" : "FAILED");
+
+        led_set(true);
+        sleep_ms(100);
+        led_set(false);
+        sleep_ms(900);
+        seconds++;
     }
 }
