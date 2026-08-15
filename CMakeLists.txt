@@ -41,6 +41,7 @@ add_executable(iss_box
     src/drivers/rotary_encoder.cpp
     src/drivers/buzzer.cpp
     src/drivers/button.cpp
+    src/drivers/gas_sensor.cpp
 )
 
 pico_generate_pio_header(iss_box ${CMAKE_CURRENT_LIST_DIR}/src/drivers/ws2812.pio)
@@ -59,6 +60,7 @@ target_link_libraries(iss_box
     pico_cyw43_arch_none      # onboard LED lives on the wireless chip; no networking yet
     hardware_pio
     hardware_pwm
+    hardware_adc
 )
 
 target_include_directories(iss_box PRIVATE
