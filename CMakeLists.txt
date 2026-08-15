@@ -35,7 +35,10 @@ add_executable(iss_box
     src/drivers/soft_i2c.cpp
     src/drivers/i2c_bus.cpp
     src/drivers/lcd1602_rgb.cpp
+    src/drivers/neopixels.cpp
 )
+
+pico_generate_pio_header(iss_box ${CMAKE_CURRENT_LIST_DIR}/src/drivers/ws2812.pio)
 
 pico_set_program_name(iss_box "iss_box")
 pico_set_program_version(iss_box "0.1")
@@ -48,6 +51,7 @@ pico_enable_stdio_usb(iss_box 1)
 target_link_libraries(iss_box
     pico_stdlib
     pico_cyw43_arch_none      # onboard LED lives on the wireless chip; no networking yet
+    hardware_pio
 )
 
 target_include_directories(iss_box PRIVATE

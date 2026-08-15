@@ -1,37 +1,40 @@
-// Die ISS-Box — Stage 4: the LCD says hello
+// Die ISS-Box — Stage 5: the NeoPixel ring
 //
-// Scans the bus once, then drives the display: text on both lines, an uptime
-// counter proving it refreshes, and a backlight slowly working through the
-// colour wheel.
+// A comet orbits the ring with a fading tail, hue drifting as it goes. This is
+// a deliberate preview of ISS mode, where a single bright pixel marks the
+// station's bearing against a dim background.
+//
+// The LCD reports the estimated current of each frame, so the power budget is
+// visible rather than theoretical.
 
 #include <cstdio>
 
 #include "board_config.hpp"
 #include "drivers/i2c_bus.hpp"
 #include "drivers/lcd1602_rgb.hpp"
-#include "hardware/clocks.h"
+#include "drivers/neopixels.hpp"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "tools/i2c_scan.hpp"
 
-// On Pico W the onboard LED is driven by the wireless chip, not by a GPIO,
-// so cyw43_arch has to be up before the LED will do anything.
-static bool led_init() {
-    return cyw43_arch_init() == 0;
-}
+namespace {
 
-static void led_set(bool on) {
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on);
-}
+constexpr uint  kTailLength = 8;
+constexpr uint  kFrameMs = 40;
+constexpr float kHueStepPerFrame = 1.5f;
 
-// Give the host a few seconds to open the USB serial port, but never block
-// forever — the finished toy runs with nothing attached.
-static void wait_for_console(uint32_t timeout_ms = 3000) {
+// On Pico W the onboard LED is driven by the wireless chip, not by a GPIO.
+bool led_init() { return cyw43_arch_init() == 0; }
+void led_set(bool on) { cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on); }
+
+void wait_for_console(uint32_t timeout_ms = 3000) {
     absolute_time_t deadline = make_timeout_time_ms(timeout_ms);
     while (!stdio_usb_connected() && !time_reached(deadline)) {
         sleep_ms(50);
     }
 }
+
+}  // namespace
 
 int main() {
     stdio_init_all();
@@ -44,7 +47,7 @@ int main() {
         }
     }
 
-    printf("\n=== ISS-Box Stage 4 ===\n");
+    printf("\n=== ISS-Box Stage 5 ===\n");
     printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
 
     drivers::i2c_bus().init();
@@ -52,35 +55,47 @@ int main() {
 
     drivers::Lcd1602Rgb lcd(drivers::i2c_bus());
     const bool lcd_ok = lcd.init();
-    if (!lcd_ok) {
-        printf("LCD did not acknowledge at 0x%02X\n", drivers::Lcd1602Rgb::kDefaultLcdAddr);
-    } else {
-        printf("LCD up.\n");
-    }
+    lcd.set_backlight(0, 40, 80);
+    lcd.print_line(0, "Ring-Test");
 
-    lcd.print_line(0, "Die ISS-Box");
-    lcd.print_line(1, "Hallo!");
-    sleep_ms(2000);
+    // Only the ring is wired so far; this becomes NEOPIXEL_TOTAL once the
+    // seven-segment is chained onto the end.
+    drivers::NeoPixels ring(board::PIN_NEOPIXEL, board::NEOPIXEL_RING);
+    ring.init();
+    printf("ring: %u pixels on GP%u\n", ring.count(), board::PIN_NEOPIXEL);
 
+    uint     head = 0;
     float    hue = 0.0f;
-    uint32_t seconds = 0;
+    uint32_t frame = 0;
+
     while (true) {
-        char line[17];
-        snprintf(line, sizeof(line), "laeuft seit %lus", (unsigned long)seconds);
-        lcd.print_line(1, line);
+        ring.clear();
 
-        // A full turn of the colour wheel every 30 s.
-        lcd.set_backlight_hue(hue);
-        hue += 12.0f;
+        // Tail fades quadratically, which reads as a much smoother falloff
+        // than linear once gamma correction is applied on top.
+        for (uint t = 0; t < kTailLength; t++) {
+            const uint  idx = (head + ring.count() - t) % ring.count();
+            const float fade = 1.0f - static_cast<float>(t) / kTailLength;
+            ring.set_hsv(idx, hue + static_cast<float>(t) * 4.0f, 1.0f, fade * fade);
+        }
+        ring.show();
 
-        // Heartbeat on the console too, so a hung I2C transfer is obvious.
-        printf("t=%lus  hue=%3.0f  lcd=%s\n", (unsigned long)seconds, (double)hue,
-               lcd_ok ? "ok" : "FAILED");
+        head = (head + 1) % ring.count();
+        hue += kHueStepPerFrame;
 
-        led_set(true);
-        sleep_ms(100);
-        led_set(false);
-        sleep_ms(900);
-        seconds++;
+        // The LCD is far slower than the ring, so refresh it about once a
+        // second rather than every frame.
+        if (frame % (1000 / kFrameMs) == 0) {
+            char line[17];
+            snprintf(line, sizeof(line), "%3lu mA  %2u px", (unsigned long)ring.last_frame_ma(),
+                     ring.count());
+            if (lcd_ok) lcd.print_line(1, line);
+            printf("frame %lu  %lu mA\n", (unsigned long)frame,
+                   (unsigned long)ring.last_frame_ma());
+            led_set(frame % (2000 / kFrameMs) == 0);
+        }
+
+        frame++;
+        sleep_ms(kFrameMs);
     }
 }
