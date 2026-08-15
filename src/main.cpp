@@ -60,6 +60,7 @@ int main() {
     tools::i2c_bus_init();
 
     while (true) {
+        tools::i2c_check_bus_lines();
         tools::i2c_scan();
         blink_for(5000);
     }

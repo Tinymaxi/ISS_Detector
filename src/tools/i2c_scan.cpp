@@ -122,6 +122,44 @@ void i2c_bus_init() {
     gpio_pull_up(board::PIN_I2C_SCL);
 }
 
+// Is the line held high by an external pull-up? Force our own pull-DOWN and
+// look: a powered module's ~10k pull-up easily overpowers the RP2040's ~60k
+// pull-down, so the pin still reads high. With nothing attached, the pull-down
+// wins and it reads low. This separates "not wired / not powered" from
+// "wired but silent".
+bool line_has_external_pullup(uint pin) {
+    gpio_set_function(pin, GPIO_FUNC_SIO);
+    gpio_set_dir(pin, GPIO_IN);
+    gpio_pull_down(pin);
+    sleep_ms(2);  // let the line settle through the bus capacitance
+    bool high = gpio_get(pin);
+    gpio_disable_pulls(pin);
+    return high;
+}
+
+void i2c_check_bus_lines() {
+    bool sda = line_has_external_pullup(board::PIN_I2C_SDA);
+    bool scl = line_has_external_pullup(board::PIN_I2C_SCL);
+
+    printf("\n--- bus lines ---\n");
+    printf("  SDA (GP%u, pin 6): %s\n", board::PIN_I2C_SDA,
+           sda ? "pulled up — a powered module is attached" : "floating — nothing pulling it up");
+    printf("  SCL (GP%u, pin 7): %s\n", board::PIN_I2C_SCL,
+           scl ? "pulled up — a powered module is attached" : "floating — nothing pulling it up");
+
+    if (!sda && !scl) {
+        printf("  => neither line is pulled up. The module has no power, or its\n");
+        printf("     VCC/GND are not connected. Check 3V3 (pin 36) and GND (pin 38)\n");
+        printf("     before suspecting SDA/SCL.\n");
+    } else if (!sda || !scl) {
+        printf("  => only one line is pulled up, so one wire is off or in the wrong\n");
+        printf("     hole. Both must sit at 3.3 V when the bus is idle.\n");
+    }
+
+    // Hand the pins back to the I2C block.
+    i2c_bus_init();
+}
+
 void i2c_scan() {
     printf("\n--- I2C scan on GP%u/GP%u (SDA/SCL) ---\n", board::PIN_I2C_SDA,
            board::PIN_I2C_SCL);
@@ -130,22 +168,32 @@ void i2c_scan() {
     // 0x00-0x07 and 0x78-0x7F are reserved by the I2C spec.
     for (uint8_t addr = 0x08; addr <= 0x77; addr++) {
         uint8_t dummy;
-        int ret = i2c_read_timeout_us(board::I2C_PORT, addr, &dummy, 1, false, 10000);
-        if (ret < 0) continue;
+        bool acked_read =
+            i2c_read_timeout_us(board::I2C_PORT, addr, &dummy, 1, false, 10000) >= 0;
+
+        // Write probe for write-only parts. 0x00 is deliberately harmless to
+        // the devices on this bus: for the AiP31068 it is a control byte with
+        // no data following, for the PCA9633 it only sets the register pointer.
+        const uint8_t zero = 0x00;
+        bool acked_write =
+            i2c_write_timeout_us(board::I2C_PORT, addr, &zero, 1, false, 10000) >= 0;
+
+        if (!acked_read && !acked_write) continue;
 
         found++;
         const char *what = describe(addr);
-        printf("  0x%02X  %s\n", addr, what ? what : "unknown device");
+        const char *how = acked_read && acked_write ? "read+write"
+                          : acked_read              ? "read only"
+                                                    : "write only";
+        printf("  0x%02X  [%s]  %s\n", addr, how, what ? what : "unknown device");
 
-        if (addr == 0x44 || addr == 0x45 || addr == 0x46) {
+        if (acked_read && (addr == 0x44 || addr == 0x45 || addr == 0x46)) {
             identify_sensirion(addr);
         }
     }
 
     if (found == 0) {
         printf("  nothing found.\n");
-        printf("  check: 3V3 (pin 36) and GND to both modules, SDA->GP4 (pin 6),\n");
-        printf("         SCL->GP5 (pin 7). SDA/SCL swapped is the usual culprit.\n");
     } else {
         printf("  %d device%s total.\n", found, found == 1 ? "" : "s");
     }
