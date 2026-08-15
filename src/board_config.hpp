@@ -24,6 +24,13 @@ constexpr uint DIGIT_COUNT       = 4;
 constexpr uint PIXELS_PER_DIGIT  = 8;
 constexpr uint DIGIT_PIXELS      = DIGIT_COUNT * PIXELS_PER_DIGIT;  // 32
 
+// How many digit modules are actually soldered up right now. Chaining fewer
+// than DIGIT_COUNT is fine — the modules present consume their own data and
+// pass the remainder downstream to nothing. Raise this to DIGIT_COUNT once all
+// four are wired.
+constexpr uint DIGITS_FITTED        = 1;
+constexpr uint DIGIT_PIXELS_FITTED  = DIGITS_FITTED * PIXELS_PER_DIGIT;
+
 // --- I2C: SHT3x/4x + DFR0464 LCD share one software-driven bus -------------
 constexpr uint PIN_I2C_SDA  = 4;      // physical 6
 constexpr uint PIN_I2C_SCL  = 5;      // physical 7

@@ -46,6 +46,10 @@ void SevenSegment::apply_glyph(uint index, uint8_t segment_bits) {
     }
 }
 
+void SevenSegment::set_segments(uint index, uint8_t segment_bits) {
+    apply_glyph(index, segment_bits);
+}
+
 void SevenSegment::set_digit(uint index, int value) {
     apply_glyph(index, (value >= 0 && value <= 9) ? kDigitFont[value] : kBlank);
 }

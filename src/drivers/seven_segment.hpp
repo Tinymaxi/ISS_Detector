@@ -39,6 +39,10 @@ public:
     void set_digit(uint index, int value);
     void set_dot(uint index, bool on);
 
+    // Raw segment control: bit 0 = a, bit 1 = b, ... bit 6 = g. Used by the
+    // bring-up test that walks one segment at a time to confirm the mapping.
+    void set_segments(uint index, uint8_t segment_bits);
+
     // Right-aligned. Without leading_zeros, unused digits on the left stay
     // dark; a value too large for the display shows dashes.
     void show_number(int value, bool leading_zeros = false);

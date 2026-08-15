@@ -1,9 +1,8 @@
-// Die ISS-Box — Stages 5 and 6: NeoPixel ring and seven-segment digits
+// Die ISS-Box — Stage 3: temperature and humidity
 //
-// Two independent chains, one data pin each. A comet orbits the ring with a
-// fading tail — deliberately previewing ISS mode, where a single bright pixel
-// marks the station's bearing — while the digits count seconds with a blinking
-// separator, previewing clock mode.
+// A first cut of WETTER mode. The LCD shows the numbers, the ring becomes a
+// thermometer arc growing blue-to-red with temperature, and the digits show
+// the reading — or as much of it as the digits currently fitted allow.
 
 #include <cstdio>
 
@@ -12,20 +11,18 @@
 #include "drivers/lcd1602_rgb.hpp"
 #include "drivers/neopixels.hpp"
 #include "drivers/seven_segment.hpp"
+#include "drivers/sht_sensor.hpp"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
 #include "tools/i2c_scan.hpp"
 
 namespace {
 
-constexpr uint  kTailLength = 8;
 constexpr uint  kFrameMs = 40;
-constexpr float kHueStepPerFrame = 1.5f;
-constexpr uint  kFramesPerSecond = 1000 / kFrameMs;
+constexpr float kTempMinC = 15.0f;  // ring empty at or below this
+constexpr float kTempMaxC = 30.0f;  // ring full at or above this
 
-// On Pico W the onboard LED is driven by the wireless chip, not by a GPIO.
 bool led_init() { return cyw43_arch_init() == 0; }
-void led_set(bool on) { cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, on); }
 
 void wait_for_console(uint32_t timeout_ms = 3000) {
     absolute_time_t deadline = make_timeout_time_ms(timeout_ms);
@@ -34,86 +31,110 @@ void wait_for_console(uint32_t timeout_ms = 3000) {
     }
 }
 
+// Thermometer arc: a blue-to-red gradient whose length tracks temperature.
+void draw_thermometer(drivers::NeoPixels &ring, float temp_c) {
+    float frac = (temp_c - kTempMinC) / (kTempMaxC - kTempMinC);
+    if (frac < 0.0f) frac = 0.0f;
+    if (frac > 1.0f) frac = 1.0f;
+
+    const uint lit = static_cast<uint>(frac * static_cast<float>(ring.count()) + 0.5f);
+
+    ring.clear();
+    for (uint i = 0; i < lit; i++) {
+        // Hue by position rather than by temperature, so the arc reads as a
+        // scale that fills up rather than a bar that changes colour.
+        const float hue = 240.0f * (1.0f - static_cast<float>(i) /
+                                               static_cast<float>(ring.count() - 1));
+        ring.set_hsv(i, hue, 1.0f, 0.6f);
+    }
+}
+
+// Shows as much of the temperature as the fitted digits allow: the full
+// "23.4" once four are wired, otherwise just the tens.
+void show_temperature(drivers::SevenSegment &digits, float temp_c, uint fitted) {
+    if (fitted >= 4) {
+        const int scaled = static_cast<int>(temp_c * 10.0f + 0.5f);
+        digits.show_number(scaled);
+        digits.set_dot(2, true);  // between the units and the tenths
+    } else {
+        const int whole = static_cast<int>(temp_c + 0.5f);
+        digits.set_digit(0, (whole / 10) % 10);
+    }
+}
+
 }  // namespace
 
 int main() {
     stdio_init_all();
     wait_for_console();
+    led_init();
 
-    if (!led_init()) {
-        while (true) {
-            printf("cyw43_arch_init() failed\n");
-            sleep_ms(1000);
-        }
-    }
-
-    printf("\n=== ISS-Box Stages 5+6 ===\n");
-    printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
+    printf("\n=== ISS-Box Stage 3: temperature + humidity ===\n");
 
     drivers::i2c_bus().init();
     tools::i2c_scan();
 
     drivers::Lcd1602Rgb lcd(drivers::i2c_bus());
     const bool          lcd_ok = lcd.init();
-    lcd.set_backlight(0, 40, 80);
-    lcd.print_line(0, "Ring + Ziffern");
 
-    // Each chain clamps its own frame, so the budgets have to be chosen to sum
-    // to something the supply can give: 300 + 300 mA plus ~50 mA for the Pico
-    // is comfortable on laptop USB. Raise both once the box runs from the 5 V
-    // Raspberry Pi supply.
+    drivers::ShtSensor sht(drivers::i2c_bus());
+    const bool         sht_ok = sht.init();
+    if (sht_ok) {
+        printf("sensor: %s, id 0x%08lX\n", sht.kind_name(), (unsigned long)sht.id());
+    } else {
+        printf("no SHT sensor answered at 0x%02X\n", drivers::ShtSensor::kDefaultAddr);
+        if (lcd_ok) {
+            lcd.set_backlight(120, 0, 0);
+            lcd.print_line(0, "Kein Sensor!");
+            lcd.print_line(1, "0x44 stumm");
+        }
+    }
+
     drivers::NeoPixels ring(board::PIN_RING, board::RING_PIXELS, 300);
     ring.init();
 
-    drivers::NeoPixels digit_pixels(board::PIN_DIGITS, board::DIGIT_PIXELS, 300);
+    drivers::NeoPixels digit_pixels(board::PIN_DIGITS, board::DIGIT_PIXELS_FITTED, 300);
     digit_pixels.init();
-    // Digits are held below the clamp deliberately. If the budget were doing
-    // the limiting, "1111" would glow brighter than "8888" — brightness would
-    // track how many segments happen to be lit, which looks like a fault.
-    // At 120 even the worst case (8888 with every dot) lands near 140 mA.
     digit_pixels.set_master_brightness(120);
-    drivers::SevenSegment digits(digit_pixels, board::DIGIT_COUNT);
+    drivers::SevenSegment digits(digit_pixels, board::DIGITS_FITTED);
 
-    printf("ring: %u px on GP%u   digits: %u px on GP%u\n", ring.count(), board::PIN_RING,
-           digit_pixels.count(), board::PIN_DIGITS);
-
-    uint     head = 0;
-    float    hue = 0.0f;
     uint32_t frame = 0;
-    uint32_t seconds = 0;
+    uint32_t bad_reads = 0;
 
     while (true) {
-        // --- ring: comet with a fading tail ---
-        ring.clear();
-        for (uint t = 0; t < kTailLength; t++) {
-            const uint  idx = (head + ring.count() - t) % ring.count();
-            const float fade = 1.0f - static_cast<float>(t) / kTailLength;
-            // Quadratic falloff reads far smoother than linear once gamma is
-            // applied on top.
-            ring.set_hsv(idx, hue + static_cast<float>(t) * 4.0f, 1.0f, fade * fade);
-        }
-        ring.show();
+        // The sensor is far slower than the display, and self-heats if polled
+        // hard, so once a second is plenty.
+        if (frame % (1000 / kFrameMs) == 0 && sht_ok) {
+            if (sht.read()) {
+                const float t = sht.temperature_c();
+                const float h = sht.humidity_pct();
 
-        head = (head + 1) % ring.count();
-        hue += kHueStepPerFrame;
+                printf("%.2f C   %.1f %%RH   (%lu failed reads)\n", (double)t, (double)h,
+                       (unsigned long)bad_reads);
 
-        // --- digits: seconds, separator blinking twice a second ---
-        if (frame % (kFramesPerSecond / 2) == 0) {
-            digits.show_time(static_cast<int>(seconds / 60), static_cast<int>(seconds % 60),
-                             (frame / (kFramesPerSecond / 2)) % 2 == 0);
-            digits.show();
-        }
+                if (lcd_ok) {
+                    char line[17];
+                    snprintf(line, sizeof(line), "%5.1f C", (double)t);
+                    lcd.print_line(0, line);
+                    snprintf(line, sizeof(line), "%5.1f %%rF", (double)h);
+                    lcd.print_line(1, line);
+                    // Backlight warms with temperature, same scale as the ring.
+                    float frac = (t - kTempMinC) / (kTempMaxC - kTempMinC);
+                    if (frac < 0.0f) frac = 0.0f;
+                    if (frac > 1.0f) frac = 1.0f;
+                    lcd.set_backlight_hue(240.0f * (1.0f - frac));
+                }
 
-        if (frame % kFramesPerSecond == 0) {
-            char line[17];
-            snprintf(line, sizeof(line), "%3lu + %3lu mA", (unsigned long)ring.last_frame_ma(),
-                     (unsigned long)digit_pixels.last_frame_ma());
-            if (lcd_ok) lcd.print_line(1, line);
-            printf("t=%lus  ring %lu mA  digits %lu mA\n", (unsigned long)seconds,
-                   (unsigned long)ring.last_frame_ma(),
-                   (unsigned long)digit_pixels.last_frame_ma());
-            led_set(seconds % 2 == 0);
-            seconds++;
+                draw_thermometer(ring, t);
+                ring.show();
+
+                digits.clear();
+                show_temperature(digits, t, board::DIGITS_FITTED);
+                digits.show();
+            } else {
+                bad_reads++;
+                printf("read failed (CRC or bus), total %lu\n", (unsigned long)bad_reads);
+            }
         }
 
         frame++;

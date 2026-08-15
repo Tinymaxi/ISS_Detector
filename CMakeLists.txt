@@ -37,6 +37,7 @@ add_executable(iss_box
     src/drivers/lcd1602_rgb.cpp
     src/drivers/neopixels.cpp
     src/drivers/seven_segment.cpp
+    src/drivers/sht_sensor.cpp
 )
 
 pico_generate_pio_header(iss_box ${CMAKE_CURRENT_LIST_DIR}/src/drivers/ws2812.pio)
