@@ -23,6 +23,11 @@ void Button::init() {
 
     if (lamp_pin_ != kNoLamp) {
         gpio_set_function(lamp_pin_, GPIO_FUNC_PWM);
+        // The lamp is a low-current LED with its own series resistor, driven
+        // straight from the pin — no transistor on the final board, which is
+        // two fewer parts to solder into a mint tin. RP2040 pads default to
+        // 4 mA; 12 mA is the maximum and keeps the output from sagging.
+        gpio_set_drive_strength(lamp_pin_, GPIO_DRIVE_STRENGTH_12MA);
         lamp_slice_ = pwm_gpio_to_slice_num(lamp_pin_);
         pwm_config cfg = pwm_get_default_config();
         // 8-bit wrap at ~1 kHz: fast enough that no one sees flicker, slow

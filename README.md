@@ -30,6 +30,9 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 | Buzzer | GP9 | 12 |
 | Rotary encoder SW / CLK / DT | GP13 / GP14 / GP15 | 17 / 19 / 20 |
 | Arcade button / lamp | GP16 / GP17 | 21 / 22 |
+
+The arcade lamp is a low-current LED with its own series resistor, driven straight from GP17 on
+PWM at 12 mA drive strength — no transistor needed.
 | MiCS-5524 `A0` / `EN` | GP26 / GP27 | 31 / 32 |
 
 Pins are spread deliberately: the final build is hand-soldered onto an Adafruit Mint Tin-Sized
