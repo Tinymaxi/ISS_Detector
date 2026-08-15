@@ -19,7 +19,8 @@ buzzer, ring flash, and an automatic switch to ISS mode.
 
 ## Hardware
 
-Raspberry Pi Pico 2 W (RP2350), C++17 on the Pico SDK.
+Raspberry Pi Pico WH (RP2040), C++17 on the Pico SDK. The "H" means headers are pre-soldered,
+including the three debug pins — so a spare plain Pico can act as an SWD probe when needed.
 
 | Function | GPIO | Pin |
 |---|---|---|

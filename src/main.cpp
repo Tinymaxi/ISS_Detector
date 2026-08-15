@@ -41,7 +41,7 @@ int main() {
     }
 
     printf("\n=== ISS-Box Stage 1 ===\n");
-    printf("board: pico2_w   sdk: %s\n", PICO_SDK_VERSION_STRING);
+    printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
     printf("sys clock: %u kHz\n", clock_get_hz(clk_sys) / 1000);
 
     uint32_t ticks = 0;

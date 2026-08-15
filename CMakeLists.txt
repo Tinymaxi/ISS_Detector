@@ -19,7 +19,9 @@ if (EXISTS ${picoVscode})
 endif()
 # ====================================================================================
 
-set(PICO_BOARD pico2_w CACHE STRING "Board type")
+# Pico WH = Pico W (RP2040) with headers pre-soldered, including the debug
+# header. The SDK has no separate pico_wh board; electrically it is a pico_w.
+set(PICO_BOARD pico_w CACHE STRING "Board type")
 
 include(pico_sdk_import.cmake)
 
