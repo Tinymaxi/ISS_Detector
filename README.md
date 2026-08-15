@@ -25,12 +25,16 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 | Function | GPIO | Pin |
 |---|---|---|
 | NeoPixel ring data | GP2 | 4 |
-| NeoPixel digits data | GP3 | 5 |
-| I2C0 SDA / SCL (SHT3x + LCD) | GP4 / GP5 | 6 / 7 |
-| Rotary encoder SW / A / B | GP13 / GP14 / GP15 | 17 / 19 / 20 |
+| I2C SDA / SCL (SHT3x + LCD) | GP4 / GP5 | 6 / 7 |
+| NeoPixel digits data | GP7 | 10 |
+| Buzzer | GP9 | 12 |
+| Rotary encoder SW / CLK / DT | GP13 / GP14 / GP15 | 17 / 19 / 20 |
 | Arcade button / lamp | GP16 / GP17 | 21 / 22 |
-| Buzzer | GP18 | 24 |
-| MiCS-5524 `EN` / `A0` | GP19 / GP26 | 25 / 31 |
+| MiCS-5524 `A0` / `EN` | GP26 / GP27 | 31 / 32 |
+
+Pins are spread deliberately: the final build is hand-soldered onto an Adafruit Mint Tin-Sized
+PermaProto, so unrelated signals get a free pin between them. Pins from the same module stay
+adjacent, since they arrive as one bundle.
 
 Peripherals: SHT3x/4x temp+humidity, DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
 32-pixel NeoPixel seven-segment (4 digits x 8 pixels, own data line), MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
