@@ -2,16 +2,14 @@
 
 #include <cstdio>
 
-#include "board_config.hpp"
-#include "hardware/i2c.h"
-#include "pico/stdlib.h"
+#include "drivers/i2c_bus.hpp"
 
 namespace tools {
 namespace {
 
-// Addresses this build actually cares about. The DFR0464 LCD is two devices in
-// one module (character controller + backlight driver) and their addresses vary
-// by hardware revision, which is exactly why we scan rather than assume.
+// Addresses this build cares about. The DFR0464 LCD is two devices in one
+// module (character controller + backlight driver) and their addresses vary by
+// hardware revision, which is why we scan rather than assume.
 struct KnownAddress {
     uint8_t     addr;
     const char *what;
@@ -50,23 +48,17 @@ uint8_t sensirion_crc(const uint8_t *data, size_t len) {
     return crc;
 }
 
-// SHT4x answers command 0x89 with a 6-byte serial number. SHT3x does not know
-// that command, so a clean CRC-checked reply is a positive identification.
+// SHT4x answers command 0x89 with a 6-byte serial number; SHT3x does not know
+// that command. A clean CRC-checked reply is a positive identification.
 bool looks_like_sht4x(uint8_t addr, uint32_t &serial_out) {
+    auto &bus = drivers::i2c_bus();
     const uint8_t cmd = 0x89;
-    if (i2c_write_timeout_us(board::I2C_PORT, addr, &cmd, 1, false, 10000) != 1) {
-        return false;
-    }
+    if (!bus.write(addr, &cmd, 1)) return false;
     sleep_ms(10);
 
     uint8_t rx[6];
-    if (i2c_read_timeout_us(board::I2C_PORT, addr, rx, sizeof(rx), false, 10000) !=
-        static_cast<int>(sizeof(rx))) {
-        return false;
-    }
-    if (sensirion_crc(&rx[0], 2) != rx[2] || sensirion_crc(&rx[3], 2) != rx[5]) {
-        return false;
-    }
+    if (!bus.read(addr, rx, sizeof(rx))) return false;
+    if (sensirion_crc(&rx[0], 2) != rx[2] || sensirion_crc(&rx[3], 2) != rx[5]) return false;
 
     serial_out = (static_cast<uint32_t>(rx[0]) << 24) | (static_cast<uint32_t>(rx[1]) << 16) |
                  (static_cast<uint32_t>(rx[3]) << 8) | rx[4];
@@ -75,20 +67,14 @@ bool looks_like_sht4x(uint8_t addr, uint32_t &serial_out) {
 
 // SHT3x answers the 16-bit command 0xF32D with a 3-byte status register.
 bool looks_like_sht3x(uint8_t addr, uint16_t &status_out) {
+    auto &bus = drivers::i2c_bus();
     const uint8_t cmd[2] = {0xF3, 0x2D};
-    if (i2c_write_timeout_us(board::I2C_PORT, addr, cmd, 2, false, 10000) != 2) {
-        return false;
-    }
+    if (!bus.write(addr, cmd, 2)) return false;
     sleep_ms(10);
 
     uint8_t rx[3];
-    if (i2c_read_timeout_us(board::I2C_PORT, addr, rx, sizeof(rx), false, 10000) !=
-        static_cast<int>(sizeof(rx))) {
-        return false;
-    }
-    if (sensirion_crc(&rx[0], 2) != rx[2]) {
-        return false;
-    }
+    if (!bus.read(addr, rx, sizeof(rx))) return false;
+    if (sensirion_crc(&rx[0], 2) != rx[2]) return false;
 
     status_out = static_cast<uint16_t>((rx[0] << 8) | rx[1]);
     return true;
@@ -112,82 +98,28 @@ void identify_sensirion(uint8_t addr) {
 
 }  // namespace
 
-void i2c_bus_init() {
-    i2c_init(board::I2C_PORT, board::I2C_BAUDRATE);
-    gpio_set_function(board::PIN_I2C_SDA, GPIO_FUNC_I2C);
-    gpio_set_function(board::PIN_I2C_SCL, GPIO_FUNC_I2C);
-    // The breakouts carry their own pull-ups; these are a harmless safety net
-    // that also keeps the bus sane if a module is unplugged mid-run.
-    gpio_pull_up(board::PIN_I2C_SDA);
-    gpio_pull_up(board::PIN_I2C_SCL);
-}
+void i2c_scan() {
+    auto &bus = drivers::i2c_bus();
 
-// Is the line held high by an external pull-up? Force our own pull-DOWN and
-// look: a powered module's ~10k pull-up easily overpowers the RP2040's ~60k
-// pull-down, so the pin still reads high. With nothing attached, the pull-down
-// wins and it reads low. This separates "not wired / not powered" from
-// "wired but silent".
-bool line_has_external_pullup(uint pin) {
-    gpio_set_function(pin, GPIO_FUNC_SIO);
-    gpio_set_dir(pin, GPIO_IN);
-    gpio_pull_down(pin);
-    sleep_ms(2);  // let the line settle through the bus capacitance
-    bool high = gpio_get(pin);
-    gpio_disable_pulls(pin);
-    return high;
-}
-
-void i2c_check_bus_lines() {
-    bool sda = line_has_external_pullup(board::PIN_I2C_SDA);
-    bool scl = line_has_external_pullup(board::PIN_I2C_SCL);
-
-    printf("\n--- bus lines ---\n");
-    printf("  SDA (GP%u, pin 6): %s\n", board::PIN_I2C_SDA,
-           sda ? "pulled up — a powered module is attached" : "floating — nothing pulling it up");
-    printf("  SCL (GP%u, pin 7): %s\n", board::PIN_I2C_SCL,
-           scl ? "pulled up — a powered module is attached" : "floating — nothing pulling it up");
-
-    if (!sda && !scl) {
-        printf("  => neither line is pulled up. The module has no power, or its\n");
-        printf("     VCC/GND are not connected. Check 3V3 (pin 36) and GND (pin 38)\n");
-        printf("     before suspecting SDA/SCL.\n");
-    } else if (!sda || !scl) {
-        printf("  => only one line is pulled up, so one wire is off or in the wrong\n");
-        printf("     hole. Both must sit at 3.3 V when the bus is idle.\n");
+    int freed = bus.recover();
+    if (freed > 0) {
+        printf("[i2c] bus was stuck; freed after %d clock pulses\n", freed);
+    } else if (freed < 0) {
+        printf("[i2c] bus STILL STUCK — a device is holding SDA low\n");
     }
 
-    // Hand the pins back to the I2C block.
-    i2c_bus_init();
-}
-
-void i2c_scan() {
-    printf("\n--- I2C scan on GP%u/GP%u (SDA/SCL) ---\n", board::PIN_I2C_SDA,
-           board::PIN_I2C_SCL);
+    printf("\n--- I2C scan ---\n");
 
     int found = 0;
     // 0x00-0x07 and 0x78-0x7F are reserved by the I2C spec.
     for (uint8_t addr = 0x08; addr <= 0x77; addr++) {
-        uint8_t dummy;
-        bool acked_read =
-            i2c_read_timeout_us(board::I2C_PORT, addr, &dummy, 1, false, 10000) >= 0;
-
-        // Write probe for write-only parts. 0x00 is deliberately harmless to
-        // the devices on this bus: for the AiP31068 it is a control byte with
-        // no data following, for the PCA9633 it only sets the register pointer.
-        const uint8_t zero = 0x00;
-        bool acked_write =
-            i2c_write_timeout_us(board::I2C_PORT, addr, &zero, 1, false, 10000) >= 0;
-
-        if (!acked_read && !acked_write) continue;
+        if (!bus.probe(addr)) continue;
 
         found++;
         const char *what = describe(addr);
-        const char *how = acked_read && acked_write ? "read+write"
-                          : acked_read              ? "read only"
-                                                    : "write only";
-        printf("  0x%02X  [%s]  %s\n", addr, how, what ? what : "unknown device");
+        printf("  0x%02X  %s\n", addr, what ? what : "unknown device");
 
-        if (acked_read && (addr == 0x44 || addr == 0x45 || addr == 0x46)) {
+        if (addr == 0x44 || addr == 0x45 || addr == 0x46) {
             identify_sensirion(addr);
         }
     }

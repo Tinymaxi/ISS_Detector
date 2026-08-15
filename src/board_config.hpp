@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "hardware/i2c.h"
 #include "pico/stdlib.h"
 
 namespace board {
@@ -18,8 +17,7 @@ constexpr uint NEOPIXEL_RING  = 24;
 constexpr uint NEOPIXEL_SEG   = 32;
 constexpr uint NEOPIXEL_TOTAL = NEOPIXEL_RING + NEOPIXEL_SEG;
 
-// --- I2C0: SHT3x/4x + DFR0464 LCD share the bus ----------------------------
-inline i2c_inst_t *const I2C_PORT = i2c0;
+// --- I2C: SHT3x/4x + DFR0464 LCD share one software-driven bus -------------
 constexpr uint PIN_I2C_SDA  = 4;      // physical 6
 constexpr uint PIN_I2C_SCL  = 5;      // physical 7
 constexpr uint I2C_BAUDRATE = 100'000;

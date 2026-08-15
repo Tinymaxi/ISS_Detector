@@ -9,6 +9,7 @@
 #include "hardware/clocks.h"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
+#include "drivers/i2c_bus.hpp"
 #include "tools/i2c_scan.hpp"
 
 // On Pico W the onboard LED is driven by the wireless chip, not by a GPIO,
@@ -57,10 +58,9 @@ int main() {
     printf("board: %s   sdk: %s\n", PICO_BOARD, PICO_SDK_VERSION_STRING);
     printf("sys clock: %u kHz\n", clock_get_hz(clk_sys) / 1000);
 
-    tools::i2c_bus_init();
+    drivers::i2c_bus().init();
 
     while (true) {
-        tools::i2c_check_bus_lines();
         tools::i2c_scan();
         blink_for(5000);
     }
