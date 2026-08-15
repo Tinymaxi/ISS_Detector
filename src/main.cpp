@@ -1,28 +1,39 @@
-// Die ISS-Box — Stage 7: rotary encoder
+// Die ISS-Box — Stage 8: arcade button and buzzer
 //
-// Turning the knob moves a marker round the ring and changes a number on the
-// LCD; the push switch resets it. Direction and detent counting are checked by
-// turning it and watching whether the numbers agree with your hand.
+// Turn the knob to pick a tune, press the arcade button to play it. The ring
+// keeps animating throughout, which is the point: the buzzer is driven by a
+// state machine rather than by sleeping, so sound and light run together.
 
 #include <cstdio>
 
 #include "board_config.hpp"
+#include "drivers/button.hpp"
+#include "drivers/buzzer.hpp"
 #include "drivers/i2c_bus.hpp"
 #include "drivers/lcd1602_rgb.hpp"
 #include "drivers/neopixels.hpp"
 #include "drivers/rotary_encoder.hpp"
 #include "drivers/seven_segment.hpp"
-#include "drivers/sht_sensor.hpp"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
-#include "tools/i2c_scan.hpp"
 
 namespace {
 
-constexpr uint kPollMs = 2;   // encoder debounce wants frequent polling
-constexpr uint kFrameMs = 40;
+constexpr uint kPollMs = 2;
 
-bool led_init() { return cyw43_arch_init() == 0; }
+struct Tune {
+    const char *name;
+    const drivers::Buzzer::Note *(*get)(size_t &);
+};
+
+const Tune kTunes[] = {
+    {"Start", drivers::Buzzer::startup},
+    {"ISS-Alarm", drivers::Buzzer::iss_alert},
+    {"Fanfare", drivers::Buzzer::fanfare},
+    {"Pups", drivers::Buzzer::raspberry},
+    {"Klick", drivers::Buzzer::click},
+};
+constexpr int kTuneCount = sizeof(kTunes) / sizeof(kTunes[0]);
 
 void wait_for_console(uint32_t timeout_ms = 3000) {
     absolute_time_t deadline = make_timeout_time_ms(timeout_ms);
@@ -37,26 +48,15 @@ int main() {
     stdio_init_all();
     wait_for_console();
 
-    printf("\n=== ISS-Box Stage 7: rotary encoder ===\n");
-    // The binary shrank by ~230 KB when the CYW43 firmware stopped being
-    // embedded, so check the wireless chip really does come up. WiFi at
-    // Stage 10 depends on this, and a silent failure now would be found late.
-    printf("cyw43_arch_init: %s\n", led_init() ? "ok" : "FAILED");
+    printf("\n=== ISS-Box Stage 8: button + buzzer ===\n");
+    printf("cyw43_arch_init: %s\n", cyw43_arch_init() == 0 ? "ok" : "FAILED");
 
     drivers::i2c_bus().init();
-    tools::i2c_scan();
 
     drivers::Lcd1602Rgb lcd(drivers::i2c_bus());
     const bool          lcd_ok = lcd.init();
-    lcd.set_backlight(0, 60, 60);
-    lcd.print_line(0, "Drehen + Klick");
+    lcd.set_backlight(40, 40, 80);
 
-    drivers::ShtSensor sht(drivers::i2c_bus());
-    sht.init();
-
-    // NeoPixels take PIO0. The quadrature decoder must sit at instruction
-    // address 0 of its PIO, which WS2812 already occupies here, so the encoder
-    // goes on PIO1.
     drivers::NeoPixels ring(board::PIN_RING, board::RING_PIXELS, 300);
     ring.init(pio0);
 
@@ -67,54 +67,82 @@ int main() {
 
     drivers::RotaryEncoder encoder(board::PIN_ENCODER_CLK, board::PIN_ENCODER_SW);
     encoder.init(pio1);
-    printf("encoder: CLK=GP%u DT=GP%u SW=GP%u on pio1\n", board::PIN_ENCODER_CLK,
-           board::PIN_ENCODER_DT, board::PIN_ENCODER_SW);
 
-    int      value = 0;
-    uint32_t clicks = 0;
+    drivers::Button button(board::PIN_BUTTON, board::PIN_BUTTON_LAMP);
+    button.init();
+
+    drivers::Buzzer buzzer(board::PIN_BUZZER);
+    buzzer.init();
+
+    printf("buzzer GP%u, button GP%u, lamp GP%u\n", board::PIN_BUZZER, board::PIN_BUTTON,
+           board::PIN_BUTTON_LAMP);
+
+    // Announce ourselves, non-blocking — the ring starts animating immediately.
+    size_t len = 0;
+    const auto *melody = drivers::Buzzer::startup(len);
+    buzzer.play(melody, len);
+
+    int      selection = 0;
     uint32_t frame = 0;
+    float    hue = 0.0f;
+    uint     head = 0;
     bool     dirty = true;
 
     while (true) {
         encoder.poll();
+        button.poll();
+        buzzer.update();
 
         const int delta = encoder.take_delta();
         if (delta != 0) {
-            value += delta;
-            printf("turn %+d -> %d\n", delta, value);
+            selection = ((selection + delta) % kTuneCount + kTuneCount) % kTuneCount;
+            printf("selection -> %d (%s)\n", selection, kTunes[selection].name);
             dirty = true;
         }
 
-        if (encoder.take_click()) {
-            clicks++;
-            value = 0;
-            printf("click %lu (reset)\n", (unsigned long)clicks);
+        // The encoder's own switch and the arcade button both play it, so the
+        // buzzer can be tested before the arcade button is wired.
+        if (button.take_click() || encoder.take_click()) {
+            size_t      n = 0;
+            const auto *m = kTunes[selection].get(n);
+            buzzer.play(m, n);
+            printf("play: %s\n", kTunes[selection].name);
             dirty = true;
         }
 
-        // Redraw only on change, so the ring is not rewritten 500 times a
-        // second while the knob sits still.
-        if (dirty || frame % (kFrameMs / kPollMs) == 0) {
-            // Marker at the current position, wrapping like a compass — a
-            // direct preview of how the ISS bearing will be drawn.
-            const uint pos =
-                static_cast<uint>(((value % static_cast<int>(ring.count())) + ring.count()) %
-                                  static_cast<int>(ring.count()));
+        // Lamp follows the sound, so the button glows while it sings.
+        button.set_lamp(buzzer.is_playing());
+
+        if (frame % 20 == 0) {  // ~25 fps at a 2 ms poll
             ring.clear();
-            for (uint i = 0; i < ring.count(); i++) ring.set(i, 0, 0, 6);  // dim backdrop
-            ring.set(pos, 255, 255, 255);
+            if (buzzer.is_playing()) {
+                // Full ring pulsing while a tune plays.
+                for (uint i = 0; i < ring.count(); i++) {
+                    ring.set_hsv(i, hue + static_cast<float>(i) * 6.0f, 1.0f, 0.7f);
+                }
+            } else {
+                // Idle: a comet, plus a marker showing the selected tune.
+                for (uint t = 0; t < 6; t++) {
+                    const uint  idx = (head + ring.count() - t) % ring.count();
+                    const float fade = 1.0f - static_cast<float>(t) / 6.0f;
+                    ring.set_hsv(idx, 200.0f, 0.8f, fade * fade * 0.5f);
+                }
+                ring.set(static_cast<uint>(selection) * 4, 255, 180, 0);
+            }
             ring.show();
 
+            head = (head + 1) % ring.count();
+            hue += 6.0f;
+
             digits.clear();
-            digits.set_digit(0, ((value % 10) + 10) % 10);
-            digits.set_dot(0, encoder.is_pressed());
+            digits.set_digit(0, selection);
+            digits.set_dot(0, buzzer.is_playing());
             digits.show();
         }
 
         if (dirty && lcd_ok) {
-            char line[17];
-            snprintf(line, sizeof(line), "Pos %-4d Clk %lu", value, (unsigned long)clicks);
-            lcd.print_line(1, line);
+            lcd.print_line(0, kTunes[selection].name);
+            lcd.print_line(1, buzzer.is_playing() ? "spielt..." : "Knopf druecken");
             dirty = false;
         }
 
