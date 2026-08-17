@@ -36,8 +36,13 @@ The arcade lamp is a low-current LED with its own series resistor, driven straig
 PWM at 12 mA drive strength — no transistor needed.
 
 The gas sensor runs at 5 V and its `A0` reaches the 3.3 V ADC through a divider: 10 k from `A0`,
-14.7 k (10 k + 4.7 k in series) to ground, giving 2.98 V at full scale — about 90% of the ADC
-range. A 100 nF cap from GP26 to AGND filters the sampling.
+15.64 k (10 k + 4.7 k + 470 + 470 in series) to ground. Sized for the Raspberry Pi adapter's
+5.1 V rather than a round 5.0 V — 3.111 V at nominal, 3.270 V at the +5% worst case, 94% of the
+ADC range. A 100 nF cap from GP26 to AGND settles the sampling.
+
+The 470 Ω resistors on each NeoPixel data line belong **close to the pixels**, not close to the
+Pico: their job is limiting current into the first pixel's input protection diodes, so they have to
+sit at the input they protect.
 
 Pins are spread deliberately: the final build is hand-soldered onto an Adafruit Mint Tin-Sized
 PermaProto, so unrelated signals get a free pin between them. Pins from the same module stay
