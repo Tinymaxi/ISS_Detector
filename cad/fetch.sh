@@ -22,6 +22,8 @@ get() {  # get <url> <output>
 get "https://datasheets.raspberrypi.com/picow/PicoW-step.zip" "pico-w.zip"
 get "$ADA/1586%20NeoPixel%20Ring%2024x/24x%20NeoPixel%20Ring%201586.step" "neopixel-ring-24.step"
 get "$ADA/5187%20SCD-40%20C02%20Sensor/5187%20SCD-40%20C02%20Sensor.step" "scd40.step"
+get "$ADA/1609%20Perma-Proto%20HalfSize/1609%20Perma-Proto%20HalfSize.step" "permaproto-half.step"
+get "$ADA/1608%20perma-proto%20quarter/1608%20perma-proto%20quarter.step" "permaproto-quarter.step"
 get "$ADA/723%20Minty%20Perma-Proto/723%20Minty%20Perma-Proto.step" "minty-permaproto.step"
 get "$ADA/471%20Arcade%20Button%2030mm/471%20Arcade%20Button%2030mm.step" "arcade-button-30mm.step"
 
