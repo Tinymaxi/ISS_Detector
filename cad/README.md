@@ -12,6 +12,7 @@ the binaries are gitignored, the script is not.
 | `permaproto-quarter.step` | Perma-Proto Quarter-Size — 50.8 × 43.2 × 1.6 mm | [Adafruit 1608](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/1608%20perma-proto%20quarter) |
 | `minty-permaproto.step` | Perma-Proto Mint Tin size — 91.4 × 56.9 × 1.6 mm | [Adafruit 723](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/723%20Minty%20Perma-Proto) |
 | `arcade-button-30mm.step` | Arcade button, 30 mm | [Adafruit 471](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/471%20Arcade%20Button%2030mm) |
+| `usb-c-breakout-4090.step` | USB-C breakout — 24.8 × 14.4 × 11.7 mm | [Adafruit 4090](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/4090%20USB%20C%20Breakout) |
 
 **The quarter-size model is an outline only.** It has 6 cylindrical surfaces against the
 half-size model's 426, so the mounting holes are there but the perforated grid is not. Fine for
@@ -26,7 +27,8 @@ height.
 
 | Part | Where to look |
 |---|---|
-| MiCS-5524 gas sensor | Not in Adafruit's CAD repo. Request it on their [issues tab](https://github.com/adafruit/Adafruit_CAD_Parts/issues), or measure it. |
+| MiCS-5524 gas sensor | No 3D model, but the board outline is exact: **12.70 × 19.05 mm**, read out of the dimension layer of Adafruit's own [EAGLE .brd](https://github.com/adafruit/Adafruit-MiCS-5524-Gas-Sensor-Breakout-PCB). More authoritative than any community model. |
+| Generic SCD40 module (AliExpress) | No model exists. `scd40.step` here is **Adafruit's 5187 board, 30.5 × 27.9 mm — not the same board**. Measure yours. The SCD4x sensor package itself is drawn in Figure 3 (p. 24) of the [Sensirion datasheet](https://sensirion.com/media/documents/48C4B7FB/67FE0194/CD_DS_SCD4x_Datasheet_D1.pdf). |
 | DFR0464 LCD1602 RGB | [SnapMagic](https://www.snapeda.com/parts/DFR0464/DFRobot/view-part/) has a 3D model; DFRobot's wiki has dimensions. |
 | KY-040 rotary encoder | Generic part — [GrabCAD](https://grabcad.com/library/tag/ky-040) has several. |
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |

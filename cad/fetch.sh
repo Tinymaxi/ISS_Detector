@@ -26,6 +26,7 @@ get "$ADA/1609%20Perma-Proto%20HalfSize/1609%20Perma-Proto%20HalfSize.step" "per
 get "$ADA/1608%20perma-proto%20quarter/1608%20perma-proto%20quarter.step" "permaproto-quarter.step"
 get "$ADA/723%20Minty%20Perma-Proto/723%20Minty%20Perma-Proto.step" "minty-permaproto.step"
 get "$ADA/471%20Arcade%20Button%2030mm/471%20Arcade%20Button%2030mm.step" "arcade-button-30mm.step"
+get "$ADA/4090%20USB%20C%20Breakout/4090%20USB%20C%20Breakout.step" "usb-c-breakout-4090.step"
 
 if [ -f pico-w.zip ]; then unzip -o -q pico-w.zip -d pico-w && rm pico-w.zip; fi
 echo
