@@ -9,7 +9,7 @@ namespace drivers {
 namespace {
 
 // Notes are deliberately high. The buzzer is a UDB-05B magnetic transducer
-// resonant at 2300 +/- 400 Hz, and a magnetic buzzer away from resonance is
+// resonant at 2300 +/- 400 Hz (driven via a 2N2222A; see the header), and a magnetic buzzer away from resonance is
 // both quiet and current-hungry: its impedance is largely inductive reactance,
 // which falls with frequency, so low notes draw more current to make less
 // noise. The first version of these melodies sat between 260 and 1046 Hz —

@@ -1,4 +1,9 @@
-// Passive buzzer on a PWM pin.
+// Magnetic buzzer, driven through an NPN transistor from a PWM pin.
+//
+// The part is a UDB-05B: 5 V, 30 mA, resonant at 2300 +/- 400 Hz. 30 mA is over
+// the RP2040's 12 mA per-pin rating, so GP9 drives a 2N2222A base through 1k
+// rather than the coil itself. That costs nothing here — a base is just another
+// load to switch — and it runs the buzzer at the 5 V its output is rated at.
 //
 // The tone generation is lifted from the Buzzer project in ~/pico/Buzzer —
 // picking a clock divider and wrap value that land on the requested frequency

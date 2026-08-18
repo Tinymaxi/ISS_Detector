@@ -82,7 +82,10 @@ melodies now sit in A6..F7 (1760–2794 Hz) rather than the 260–1046 Hz they
 started in.
 
 **30 mA exceeds the RP2040's 12 mA per-pin rating**, and off-resonance notes
-would exceed even that. The 2N2222A freed up when the arcade lamp turned out not
-to need one belongs here instead: buzzer between 5 V and the collector, 1 kΩ from
-GP9 to the base, emitter to ground. No code change — PWM drives a base fine — and
-it runs the buzzer at 5 V where the 83 dBA figure applies.
+would exceed even that. So the buzzer is driven through the 2N2222A that the
+arcade lamp turned out not to need: buzzer between 5 V and the collector, 1 kΩ
+from GP9 to the base, emitter to ground. No code change — PWM drives a base fine
+— and it runs the buzzer at 5 V where the 83 dBA figure applies.
+
+The full wiring, including this, is in [../README.md](../README.md) and in the
+printable wiring sheet.
