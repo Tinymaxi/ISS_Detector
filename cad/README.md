@@ -44,7 +44,7 @@ matter — a hole diameter beats a mesh for enclosure work.
 |---|---|---|---|
 | Arcade button AB30L5-B | **Ø 28.0 mm (M28)** | ~33 mm ⌀, ~29 mm deep | BerryBase datasheet in this folder |
 | KY-040 encoder | **Ø 7 mm** threaded bush | PCB ~26 × 19 mm; knob 15 mm ⌀ × 16.5 mm | Supplier listings — **varies, measure yours** |
-| Passive magnetic buzzer | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | bastelgarage listing |
+| Buzzer UDB-05B | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | Datasheet in this folder |
 
 **KY-040 dimensions vary between suppliers** — 15 × 16.5, 26 × 19, 30 × 18 and
 32 × 19 mm are all listed by different sellers for the "same" module. Measure the
@@ -60,3 +60,29 @@ The Adafruit 471 model is a usable stand-in for the BerryBase arcade button
 The KY-040 and the buzzer are commodity parts with no manufacturer CAD.
 [GrabCAD](https://grabcad.com/library) has community models of both if a solid is
 really wanted, though for a cylinder 9.2 mm across it is quicker to draw one.
+
+
+## Buzzer — UDB-05B
+
+Datasheet in this folder. It is a **magnetic** transducer, not piezo:
+
+| | |
+|---|---|
+| Rated voltage | 5.0 V (range 3.0–7.0) |
+| Max rated current | **30 mA** |
+| Resonant frequency | **2300 ± 400 Hz** |
+| Output | 83 dBA at 10 cm, at resonance |
+
+Two consequences, both acted on in `drivers/buzzer.cpp`:
+
+**Melodies must live near 2300 Hz.** A magnetic buzzer away from resonance is
+quiet *and* current-hungry — its impedance is mostly inductive reactance, which
+falls with frequency, so low notes draw more current to make less noise. The
+melodies now sit in A6..F7 (1760–2794 Hz) rather than the 260–1046 Hz they
+started in.
+
+**30 mA exceeds the RP2040's 12 mA per-pin rating**, and off-resonance notes
+would exceed even that. The 2N2222A freed up when the arcade lamp turned out not
+to need one belongs here instead: buzzer between 5 V and the collector, 1 kΩ from
+GP9 to the base, emitter to ground. No code change — PWM drives a base fine — and
+it runs the buzzer at 5 V where the 83 dBA figure applies.

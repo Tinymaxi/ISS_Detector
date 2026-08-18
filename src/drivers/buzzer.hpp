@@ -41,7 +41,7 @@ public:
     // outlive playback — use the static melodies below or a constexpr array.
     void play(const Note *melody, size_t length, float volume = 0.6f);
 
-    void beep(uint16_t freq_hz = 1600, uint16_t duration_ms = 60, float volume = 0.6f);
+    void beep(uint16_t freq_hz = 2300, uint16_t duration_ms = 60, float volume = 0.6f);
     void stop();
 
     // --- built-in melodies -------------------------------------------------

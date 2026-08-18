@@ -127,7 +127,7 @@ int main() {
             peak_excess = 0.0f;
             gas.hold_baseline(true);  // keep the puff out of its own reference
             measure_end = make_timeout_time_ms(kMeasureMs);
-            buzzer.beep(1200, 80);
+            buzzer.beep(2300, 80);
             printf("--- measuring for %lu ms ---\n", (unsigned long)kMeasureMs);
         }
 

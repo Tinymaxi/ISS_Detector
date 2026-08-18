@@ -8,9 +8,18 @@
 namespace drivers {
 namespace {
 
-constexpr uint32_t NOTE_C4 = 261, NOTE_D4 = 293, NOTE_E4 = 329, NOTE_G4 = 392;
-constexpr uint32_t NOTE_C5 = 523, NOTE_E5 = 659, NOTE_G5 = 784, NOTE_A5 = 880;
-constexpr uint32_t NOTE_C6 = 1046;
+// Notes are deliberately high. The buzzer is a UDB-05B magnetic transducer
+// resonant at 2300 +/- 400 Hz, and a magnetic buzzer away from resonance is
+// both quiet and current-hungry: its impedance is largely inductive reactance,
+// which falls with frequency, so low notes draw more current to make less
+// noise. The first version of these melodies sat between 260 and 1046 Hz —
+// one to three octaves below where this part wants to sing.
+//
+// Everything now lives in A6..F7, straddling the resonant peak. Six notes is a
+// narrow palette for a melody, but that is what the hardware offers, and the
+// ISS alarm has to carry from another room to be worth anything.
+constexpr uint32_t NOTE_A6 = 1760, NOTE_B6 = 1976, NOTE_C7 = 2093;
+constexpr uint32_t NOTE_D7 = 2349, NOTE_E7 = 2637, NOTE_F7 = 2794;
 
 // Each note sounds for this fraction of its slot, the remainder being silence.
 // Without it, two identical notes in a row merge into one long tone.
@@ -129,14 +138,14 @@ void Buzzer::update() {
 
 const Buzzer::Note *Buzzer::startup(size_t &length) {
     static constexpr Note kMelody[] = {
-        {NOTE_C5, 90}, {NOTE_E5, 90}, {NOTE_G5, 90}, {NOTE_C6, 180},
+        {NOTE_A6, 90}, {NOTE_C7, 90}, {NOTE_E7, 90}, {NOTE_F7, 180},
     };
     length = sizeof(kMelody) / sizeof(kMelody[0]);
     return kMelody;
 }
 
 const Buzzer::Note *Buzzer::click(size_t &length) {
-    static constexpr Note kMelody[] = {{NOTE_A5, 25}};
+    static constexpr Note kMelody[] = {{NOTE_C7, 25}};
     length = sizeof(kMelody) / sizeof(kMelody[0]);
     return kMelody;
 }
@@ -144,10 +153,12 @@ const Buzzer::Note *Buzzer::click(size_t &length) {
 const Buzzer::Note *Buzzer::iss_alert(size_t &length) {
     // Deliberately nagging: a two-tone siren that is hard to ignore from
     // another room, because the whole point is to send a child outdoors.
+    // Both tones sit within the resonant peak, so this is the loudest thing
+    // the box can do — which is the entire point of it.
     static constexpr Note kMelody[] = {
-        {NOTE_G5, 160}, {NOTE_C6, 160}, {NOTE_G5, 160}, {NOTE_C6, 160},
-        {NOTE_G5, 160}, {NOTE_C6, 160}, {0, 200},
-        {NOTE_G5, 160}, {NOTE_C6, 160}, {NOTE_G5, 160}, {NOTE_C6, 320},
+        {NOTE_C7, 160}, {NOTE_E7, 160}, {NOTE_C7, 160}, {NOTE_E7, 160},
+        {NOTE_C7, 160}, {NOTE_E7, 160}, {0, 200},
+        {NOTE_C7, 160}, {NOTE_E7, 160}, {NOTE_C7, 160}, {NOTE_E7, 320},
     };
     length = sizeof(kMelody) / sizeof(kMelody[0]);
     return kMelody;
@@ -155,8 +166,8 @@ const Buzzer::Note *Buzzer::iss_alert(size_t &length) {
 
 const Buzzer::Note *Buzzer::fanfare(size_t &length) {
     static constexpr Note kMelody[] = {
-        {NOTE_C5, 120}, {NOTE_E5, 120}, {NOTE_G5, 120},
-        {NOTE_C6, 240}, {0, 60},        {NOTE_G5, 120}, {NOTE_C6, 400},
+        {NOTE_A6, 120}, {NOTE_C7, 120}, {NOTE_E7, 120},
+        {NOTE_F7, 240}, {0, 60},        {NOTE_E7, 120}, {NOTE_F7, 400},
     };
     length = sizeof(kMelody) / sizeof(kMelody[0]);
     return kMelody;
@@ -165,7 +176,7 @@ const Buzzer::Note *Buzzer::fanfare(size_t &length) {
 const Buzzer::Note *Buzzer::raspberry(size_t &length) {
     // A descending slide, the musical equivalent of a shrug.
     static constexpr Note kMelody[] = {
-        {NOTE_G4, 140}, {NOTE_E4, 140}, {NOTE_D4, 140}, {NOTE_C4, 420},
+        {NOTE_F7, 140}, {NOTE_D7, 140}, {NOTE_B6, 140}, {NOTE_A6, 420},
     };
     length = sizeof(kMelody) / sizeof(kMelody[0]);
     return kMelody;
