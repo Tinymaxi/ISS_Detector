@@ -48,7 +48,7 @@ Pins are spread deliberately: the final build is hand-soldered onto an Adafruit 
 PermaProto, so unrelated signals get a free pin between them. Pins from the same module stay
 adjacent, since they arrive as one bundle.
 
-Peripherals: SHT3x/4x temp+humidity, DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
+Peripherals: SCD40 CO2+temp+humidity (0x62) and/or SHT3x temp+humidity (0x44), DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
 32-pixel NeoPixel seven-segment (4 digits x 8 pixels, own data line), MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
 
 Powered entirely through the Pico's own USB connector — a USB-C Raspberry Pi supply with a

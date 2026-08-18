@@ -54,8 +54,4 @@ private:
     float    humidity_pct_ = 0.0f;
 };
 
-// Sensirion CRC-8: polynomial 0x31, initialised to 0xFF. Shared with the bus
-// scanner, which uses it for the same identification trick.
-uint8_t sensirion_crc(const uint8_t *data, size_t len);
-
 }  // namespace drivers

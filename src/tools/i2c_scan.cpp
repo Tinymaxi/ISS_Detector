@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include "drivers/i2c_bus.hpp"
+#include "drivers/sensirion.hpp"
 
 namespace tools {
 namespace {
@@ -23,7 +24,7 @@ constexpr KnownAddress kKnown[] = {
     {0x45, "SHT3x alternate / SHT4x variant"},
     {0x46, "SHT4x variant"},
     {0x60, "LCD RGB backlight (PCA9633, DFR0464 v1.0)"},
-    {0x62, "LCD RGB backlight (PCA9633 alternate)"},
+    {0x62, "SCD40/SCD41 CO2+temp+humidity — collides with a PCA9633 alternate"},
     {0x6B, "LCD RGB backlight (some DFR0464 revisions)"},
     {0x70, "PCA9633 All-Call — an echo of the backlight driver, not a real device"},
 };
@@ -33,19 +34,6 @@ const char *describe(uint8_t addr) {
         if (k.addr == addr) return k.what;
     }
     return nullptr;
-}
-
-// Sensirion CRC-8: polynomial 0x31, initialised to 0xFF.
-uint8_t sensirion_crc(const uint8_t *data, size_t len) {
-    uint8_t crc = 0xFF;
-    for (size_t i = 0; i < len; i++) {
-        crc ^= data[i];
-        for (int bit = 0; bit < 8; bit++) {
-            crc = (crc & 0x80) ? static_cast<uint8_t>((crc << 1) ^ 0x31)
-                               : static_cast<uint8_t>(crc << 1);
-        }
-    }
-    return crc;
 }
 
 // SHT4x answers command 0x89 with a 6-byte serial number; SHT3x does not know
@@ -58,7 +46,9 @@ bool looks_like_sht4x(uint8_t addr, uint32_t &serial_out) {
 
     uint8_t rx[6];
     if (!bus.read(addr, rx, sizeof(rx))) return false;
-    if (sensirion_crc(&rx[0], 2) != rx[2] || sensirion_crc(&rx[3], 2) != rx[5]) return false;
+    if (!drivers::sensirion::word_ok(&rx[0]) || !drivers::sensirion::word_ok(&rx[3])) {
+        return false;
+    }
 
     serial_out = (static_cast<uint32_t>(rx[0]) << 24) | (static_cast<uint32_t>(rx[1]) << 16) |
                  (static_cast<uint32_t>(rx[3]) << 8) | rx[4];
@@ -74,10 +64,41 @@ bool looks_like_sht3x(uint8_t addr, uint16_t &status_out) {
 
     uint8_t rx[3];
     if (!bus.read(addr, rx, sizeof(rx))) return false;
-    if (sensirion_crc(&rx[0], 2) != rx[2]) return false;
+    if (!drivers::sensirion::word_ok(&rx[0])) return false;
 
     status_out = static_cast<uint16_t>((rx[0] << 8) | rx[1]);
     return true;
+}
+
+// SCD4x answers get_serial_number (0x3682) with three CRC'd words. It only
+// does so when not mid-measurement, so a failure here is inconclusive rather
+// than proof of absence — a previous boot may have left periodic mode running.
+bool looks_like_scd4x(uint8_t addr, uint64_t &serial_out) {
+    auto &bus = drivers::i2c_bus();
+    const uint8_t cmd[2] = {0x36, 0x82};
+    if (!bus.write(addr, cmd, 2)) return false;
+    sleep_ms(2);
+
+    uint8_t rx[9];
+    if (!bus.read(addr, rx, sizeof(rx))) return false;
+
+    uint16_t w[3];
+    for (int i = 0; i < 3; i++) {
+        if (!drivers::sensirion::read_word(&rx[i * 3], w[i])) return false;
+    }
+    serial_out = (static_cast<uint64_t>(w[0]) << 32) | (static_cast<uint64_t>(w[1]) << 16) | w[2];
+    return true;
+}
+
+void identify_scd4x(uint8_t addr) {
+    uint64_t serial = 0;
+    if (looks_like_scd4x(addr, serial)) {
+        printf("            -> SCD4x confirmed, serial 0x%012llX\n",
+               (unsigned long long)serial);
+    } else {
+        printf("            -> no serial; either mid-measurement, or this is a\n");
+        printf("               PCA9633 backlight rather than an SCD4x\n");
+    }
 }
 
 void identify_sensirion(uint8_t addr) {
@@ -121,6 +142,8 @@ void i2c_scan() {
 
         if (addr == 0x44 || addr == 0x45 || addr == 0x46) {
             identify_sensirion(addr);
+        } else if (addr == 0x62) {
+            identify_scd4x(addr);
         }
     }
 

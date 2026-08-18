@@ -17,6 +17,7 @@
 #include "drivers/lcd1602_rgb.hpp"
 #include "drivers/neopixels.hpp"
 #include "drivers/rotary_encoder.hpp"
+#include "drivers/scd4x.hpp"
 #include "drivers/seven_segment.hpp"
 #include "pico/cyw43_arch.h"
 #include "pico/stdlib.h"
@@ -82,6 +83,21 @@ int main() {
     printf("gas: A0 GP%u (ADC%u), EN GP%u, heater on\n", board::PIN_GAS_AO,
            board::GAS_ADC_CHANNEL, board::PIN_GAS_EN);
 
+    // SCD4x if fitted. Absent is fine — begin() just reports false and the
+    // rest of the box carries on, so this build works either side of the swap.
+    drivers::Scd4x scd(drivers::i2c_bus());
+    const bool     scd_ok = scd.begin();
+    if (scd_ok) {
+        printf("scd4x: serial 0x%012llX, periodic mode started\n",
+               (unsigned long long)scd.serial());
+        // The sensor pulses to ~205 mA while measuring and warms itself, so its
+        // own temperature reads high. 4 C is the factory default offset; adjust
+        // once it has settled in the finished box.
+        scd.set_temperature_offset(4.0f);
+    } else {
+        printf("scd4x: not found at 0x%02X\n", drivers::Scd4x::kDefaultAddr);
+    }
+
     if (lcd_ok) lcd.print_line(0, "Sensor waermt");
     sleep_ms(1500);  // the heater needs a moment before readings mean anything
     gas.update();
@@ -98,6 +114,13 @@ int main() {
         button.poll();
         buzzer.update();
         gas.update();
+
+        // Rate-limits itself; true only on the loop where a fresh sample lands.
+        // First one arrives about five seconds after start-up.
+        if (scd_ok && scd.poll()) {
+            printf("scd4x: %u ppm CO2   %.2f C   %.1f %%RH\n", scd.co2_ppm(),
+                   (double)scd.temperature_c(), (double)scd.humidity_pct());
+        }
 
         if (!measuring && (button.take_click() || encoder.take_click())) {
             measuring = true;

@@ -38,6 +38,8 @@ add_executable(iss_box
     src/drivers/neopixels.cpp
     src/drivers/seven_segment.cpp
     src/drivers/sht_sensor.cpp
+    src/drivers/sensirion.cpp
+    src/drivers/scd4x.cpp
     src/drivers/rotary_encoder.cpp
     src/drivers/buzzer.cpp
     src/drivers/button.cpp
