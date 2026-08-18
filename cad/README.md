@@ -31,3 +31,30 @@ height.
 | KY-040 rotary encoder | Generic part — [GrabCAD](https://grabcad.com/library/tag/ky-040) has several. |
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
 | RGB digit module | Depends on vendor; no standard model. |
+
+
+## Panel cutouts
+
+For the parts where no STEP file exists, these are the numbers that actually
+matter — a hole diameter beats a mesh for enclosure work.
+
+| Part | Panel hole | Body | Source |
+|---|---|---|---|
+| Arcade button AB30L5-B | **Ø 28.0 mm (M28)** | ~33 mm ⌀, ~29 mm deep | BerryBase datasheet in this folder |
+| KY-040 encoder | **Ø 7 mm** threaded bush | PCB ~26 × 19 mm; knob 15 mm ⌀ × 16.5 mm | Supplier listings — **varies, measure yours** |
+| Passive magnetic buzzer | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | bastelgarage listing |
+
+**KY-040 dimensions vary between suppliers** — 15 × 16.5, 26 × 19, 30 × 18 and
+32 × 19 mm are all listed by different sellers for the "same" module. Measure the
+one in your hand rather than trusting any of them.
+
+The Adafruit 471 model is a usable stand-in for the BerryBase arcade button
+(34.4 mm body against the datasheet's ~33 mm), but note its Z axis extends to
+228 mm because the wire harness is modelled at full length. Use the datasheet's
+Ø 28 mm for the panel hole, not a measurement off the model.
+
+## No STEP available
+
+The KY-040 and the buzzer are commodity parts with no manufacturer CAD.
+[GrabCAD](https://grabcad.com/library) has community models of both if a solid is
+really wanted, though for a cylinder 9.2 mm across it is quicker to draw one.
