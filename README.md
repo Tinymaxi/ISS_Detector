@@ -17,6 +17,13 @@ when it's on the far side of the planet, blazing white when it's overhead.
 Whatever mode the box is in, it interrupts itself when the ISS actually rises above the horizon:
 buzzer, ring flash, and an automatic switch to ISS mode.
 
+## Wiring sheet
+
+[`docs/wiring.pdf`](docs/wiring.pdf) is the printable build reference — pin map, net list, module
+tables, schematics for the gas divider, buzzer driver and power inlet, plus the solder order.
+[`docs/wiring.html`](docs/wiring.html) is its source; open it in any browser and print, or run
+`./docs/build-wiring.sh` to re-render the PDF after an edit.
+
 ## Hardware
 
 Raspberry Pi Pico WH (RP2040), C++17 on the Pico SDK. The "H" means headers are pre-soldered,
