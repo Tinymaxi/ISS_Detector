@@ -9,6 +9,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 ADA="https://raw.githubusercontent.com/adafruit/Adafruit_CAD_Parts/main"
+SFE="https://raw.githubusercontent.com/sparkfun/3D_Models/master/products"
 
 get() {  # get <url> <output>
     printf '%-34s ' "$2"
@@ -27,6 +28,11 @@ get "$ADA/1608%20perma-proto%20quarter/1608%20perma-proto%20quarter.step" "perma
 get "$ADA/723%20Minty%20Perma-Proto/723%20Minty%20Perma-Proto.step" "minty-permaproto.step"
 get "$ADA/471%20Arcade%20Button%2030mm/471%20Arcade%20Button%2030mm.step" "arcade-button-30mm.step"
 get "$ADA/4090%20USB%20C%20Breakout/4090%20USB%20C%20Breakout.step" "usb-c-breakout-4090.step"
+
+# The 63.5 mm wide protoboard. SparkFun publish an STL, not a STEP, and the
+# board is a plain rectangle with no mounting holes -- so the dimensions in
+# README.md are more use than the 4 MB mesh.
+get "$SFE/12070/stl/SIK-DIP-board.stl" "sparkfun-solderable-breadboard-12070.stl"
 
 if [ -f pico-w.zip ]; then unzip -o -q pico-w.zip -d pico-w && rm pico-w.zip; fi
 echo

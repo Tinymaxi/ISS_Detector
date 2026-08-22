@@ -13,6 +13,7 @@ the binaries are gitignored, the script is not.
 | `minty-permaproto.step` | Perma-Proto Mint Tin size — 91.4 × 56.9 × 1.6 mm | [Adafruit 723](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/723%20Minty%20Perma-Proto) |
 | `arcade-button-30mm.step` | Arcade button, 30 mm | [Adafruit 471](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/471%20Arcade%20Button%2030mm) |
 | `usb-c-breakout-4090.step` | USB-C breakout — 24.8 × 14.4 × 11.7 mm | [Adafruit 4090](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/4090%20USB%20C%20Breakout) |
+| `sparkfun-solderable-breadboard-12070.stl` | Solder-able Breadboard — **93.98 × 63.50 × 1.60 mm** | [SparkFun 3D_Models](https://github.com/sparkfun/3D_Models/tree/master/products/12070) — **STL, not STEP** |
 
 **The quarter-size model is an outline only.** It has 6 cylindrical surfaces against the
 half-size model's 426, so the mounting holes are there but the perforated grid is not. Fine for
@@ -34,6 +35,26 @@ height.
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
 | RGB digit module | Depends on vendor; no standard model. |
 
+
+## The 63.5 mm protoboard — SparkFun 12070
+
+The only stock board found at exactly 63.5 mm wide. Dimensions confirmed twice
+over: the dimension layer of SparkFun's own
+[Eagle `.brd`](https://github.com/sparkfun/Solder-able_Breadboard) gives
+93.980 × 63.500 mm, and the STL's bounding box agrees to 0.005 mm at
+1.600 mm thick.
+
+Layout, read out of the same file: **60 nets of five holes** (30 columns × two
+banks) plus **four power rails of 29 holes**. That is the same column count as
+the Perma-Proto Half — the extra size is board margin, not more strips.
+
+Two things to know before choosing it:
+
+- **No mounting holes.** The `.brd` has no `<hole>` elements at all; it is a
+  plain rectangle. The Perma-Proto boards do have them.
+- **STL, not STEP** — a mesh, and a 4 MB one. For enclosure clearance work a
+  93.98 × 63.5 × 1.6 mm box drawn by hand is a better model than the mesh; keep
+  the STL only for checking how it looks.
 
 ## Panel cutouts
 
