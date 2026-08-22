@@ -12,7 +12,7 @@ the binaries are gitignored, the script is not.
 | `permaproto-quarter.step` | Perma-Proto Quarter-Size — 50.8 × 43.2 × 1.6 mm | [Adafruit 1608](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/1608%20perma-proto%20quarter) |
 | `minty-permaproto.step` | Perma-Proto Mint Tin size — 91.4 × 56.9 × 1.6 mm | [Adafruit 723](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/723%20Minty%20Perma-Proto) |
 | `arcade-button-30mm.step` | Arcade button, 30 mm | [Adafruit 471](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/471%20Arcade%20Button%2030mm) |
-| `usb-c-breakout-4090.step` | USB-C breakout — 24.8 × 14.4 × 11.7 mm | [Adafruit 4090](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/4090%20USB%20C%20Breakout) |
+| `usb-c-breakout-4090.step` | USB-C breakout — 24.79 × 14.38 × **4.20** mm | [Adafruit 4090](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/4090%20USB%20C%20Breakout) |
 | `sparkfun-solderable-breadboard-12070.stl` | Solder-able Breadboard — **93.98 × 63.50 × 1.60 mm** | [SparkFun 3D_Models](https://github.com/sparkfun/3D_Models/tree/master/products/12070) — **STL, not STEP** |
 
 **The quarter-size model is an outline only.** It has 6 cylindrical surfaces against the
@@ -35,6 +35,25 @@ height.
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
 | RGB digit module | Depends on vendor; no standard model. |
 
+
+## USB-C breakout 4090 — the height is not 11.7 mm
+
+Adafruit's own STEP, and a good model — but its raw bounding box reads
+24.79 × 14.38 × **11.66** mm, and that last figure is wrong for clearance.
+
+Ten stray points sit at exactly Z = −8.459, in a 0.1 mm sliver of Y, with
+nothing at all between them and the rest of the model. A flat artifact, not a
+feature. Drop them and the real envelope is:
+
+| | |
+|---|---|
+| Board + connector | **24.79 × 14.38 × 4.20 mm** |
+| PCB plane | Z −1.00 to +0.80 |
+| Connector shell | up to Z +3.20 |
+| Socket face | X −4.47, protruding past the board edge |
+
+Same failure mode as the arcade button model reaching Z = 228 mm for its wire
+harness: **measure a bounding box, then look at what is setting it.**
 
 ## The 63.5 mm protoboard — SparkFun 12070
 
