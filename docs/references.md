@@ -18,6 +18,58 @@ datasheet does not tell you.
   — filed against a "Pico WH 2022", the same board as ours. If SWD ever refuses to connect, swap
   those two wires before debugging anything else.
 
+### Naming, because it is genuinely confusing
+
+| Term | What it is |
+|---|---|
+| **RP2040** | The *chip*. 56-pin QFN. Not a board. |
+| **Pico** | The *board* built around an RP2040. 40 pins. |
+| **Pico W** | Pico + Infineon CYW43439 wireless. |
+| **Pico WH** | Pico W with the headers already soldered. **This is ours.** |
+| RP2350 | The newer chip. Not ours. |
+| Pico 2 / Pico 2 W | Boards around the RP2350. Not ours. |
+
+Confirmed rather than assumed: BOOTSEL mounts as `RPI-RP2` (an RP2350 board mounts as
+`RP2350`), and the build uses `PICO_BOARD=pico_w`.
+
+### The 40-pin header, for drawing schematic symbols
+
+From Figure 2 of [`../datasheets/pico-w.pdf`](../datasheets/pico-w.pdf). **Pico and Pico W
+have identical headers** — the wireless chip took over GP23, GP24, GP25 and GP29, and none
+of those reach the header on either board.
+
+| Pin | Name | | Pin | Name |
+|---|---|---|---|---|
+| 1 | `GP0` | | 40 | `VBUS` |
+| 2 | `GP1` | | 39 | `VSYS` |
+| 3 | `GND` | | 38 | `GND` |
+| 4 | `GP2` | | 37 | `3V3_EN` |
+| 5 | `GP3` | | 36 | `3V3(OUT)` |
+| 6 | `GP4` | | 35 | `ADC_VREF` |
+| 7 | `GP5` | | 34 | `GP28` / ADC2 |
+| 8 | `GND` | | 33 | **`AGND`** |
+| 9 | `GP6` | | 32 | `GP27` / ADC1 |
+| 10 | `GP7` | | 31 | `GP26` / ADC0 |
+| 11 | `GP8` | | 30 | `RUN` |
+| 12 | `GP9` | | 29 | `GP22` |
+| 13 | `GND` | | 28 | `GND` |
+| 14 | `GP10` | | 27 | `GP21` |
+| 15 | `GP11` | | 26 | `GP20` |
+| 16 | `GP12` | | 25 | `GP19` |
+| 17 | `GP13` | | 24 | `GP18` |
+| 18 | `GND` | | 23 | `GND` |
+| 19 | `GP14` | | 22 | `GP17` |
+| 20 | `GP15` | | 21 | `GP16` |
+
+Plus a separate 3-pin debug header on the bottom edge: `SWCLK`, `GND`, `SWDIO`.
+
+**`AGND` on pin 33 deserves its own symbol pin**, not merging into the common GND. The gas
+divider and its 100 nF return there specifically, and that only stays true on the PCB if the
+schematic says so.
+
+The **official schematic is Appendix B** of the Pico W datasheet in `datasheets/`, so the
+authoritative symbol can be copied from Raspberry Pi's own drawing.
+
 ## I2C peripherals (GP4 = SDA pin 6, GP5 = SCL pin 7, power from 3V3 pin 36)
 
 | Part | Reference | Notes |
