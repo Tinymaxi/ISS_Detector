@@ -33,7 +33,7 @@ height.
 | DFR0464 LCD1602 RGB | [SnapMagic](https://www.snapeda.com/parts/DFR0464/DFRobot/view-part/) has a 3D model; DFRobot's wiki has dimensions. |
 | KY-040 rotary encoder | Generic part — [GrabCAD](https://grabcad.com/library/tag/ky-040) has several. |
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
-| RGB digit module | Depends on vendor; no standard model. |
+| RGB digit module | No CAD model, but the [datasheet](../datasheets/rgbdigit.pdf) gives the housing exactly: **34.0 × 24.0 mm**, 2.54 mm pin pitch, 3-in/3-out. |
 
 
 ## USB-C breakout 4090 — the height is not 11.7 mm
@@ -82,9 +82,10 @@ matter — a hole diameter beats a mesh for enclosure work.
 
 | Part | Panel hole | Body | Source |
 |---|---|---|---|
-| Arcade button AB30L5-B | **Ø 28.0 mm (M28)** | ~33 mm ⌀, ~29 mm deep | BerryBase datasheet in this folder |
+| Arcade button AB30L5-B | **Ø 28.0 mm (M28)** | ~33 mm ⌀, ~29 mm deep | [datasheet](../datasheets/arcade-button-AB30L5-B.pdf) |
 | KY-040 encoder | **Ø 7 mm** threaded bush | PCB ~26 × 19 mm; knob 15 mm ⌀ × 16.5 mm | Supplier listings — **varies, measure yours** |
-| Buzzer UDB-05B | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | Datasheet in this folder |
+| Buzzer UDB-05B | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | [datasheet](../datasheets/buzzer-UDB-05B.pdf) |
+| RGBDigit 1" | **34.0 × 24.0 mm** per digit | digit 25.40 mm, ±0.25 | [datasheet](../datasheets/rgbdigit.pdf) |
 
 **KY-040 dimensions vary between suppliers** — 15 × 16.5, 26 × 19, 30 × 18 and
 32 × 19 mm are all listed by different sellers for the "same" module. Measure the
@@ -104,7 +105,7 @@ really wanted, though for a cylinder 9.2 mm across it is quicker to draw one.
 
 ## Buzzer — UDB-05B
 
-Datasheet in this folder. It is a **magnetic** transducer, not piezo:
+[Datasheet](../datasheets/buzzer-UDB-05B.pdf). It is a **magnetic** transducer, not piezo:
 
 | | |
 |---|---|

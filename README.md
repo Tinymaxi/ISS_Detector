@@ -17,6 +17,12 @@ when it's on the far side of the planet, blazing white when it's overhead.
 Whatever mode the box is in, it interrupts itself when the ISS actually rises above the horizon:
 buzzer, ring flash, and an automatic switch to ISS mode.
 
+## Datasheets
+
+[`datasheets/`](datasheets/) holds the manufacturer PDF for every part, committed rather
+than linked, with an index in [`datasheets/README.md`](datasheets/README.md).
+`./datasheets/fetch.sh` re-downloads the ones that have a public URL.
+
 ## Wiring sheet
 
 [`docs/wiring.pdf`](docs/wiring.pdf) is the printable build reference — pin map, net list, module

@@ -1,6 +1,10 @@
 # Bench references
 
-Datasheets and pinouts for the parts in this build.
+Pinouts, guides and gotchas for the parts in this build.
+
+**The datasheets themselves live in [`../datasheets/`](../datasheets/)** — every part,
+committed, with an index explaining where each came from. This file is for the things a
+datasheet does not tell you.
 
 ## Board — Raspberry Pi Pico WH (RP2040)
 
