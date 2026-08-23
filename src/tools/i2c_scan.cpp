@@ -25,6 +25,7 @@ constexpr KnownAddress kKnown[] = {
     {0x46, "SHT4x variant"},
     {0x60, "LCD RGB backlight (PCA9633, DFR0464 v1.0)"},
     {0x62, "SCD40/SCD41 CO2+temp+humidity — collides with a PCA9633 alternate"},
+    {0x68, "DS3231 precision RTC (fixed address)"},
     {0x6B, "LCD RGB backlight (some DFR0464 revisions)"},
     {0x70, "PCA9633 All-Call — an echo of the backlight driver, not a real device"},
 };

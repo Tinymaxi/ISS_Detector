@@ -230,8 +230,8 @@
   <div class="meta">
     <span>Raspberry Pi Pico WH</span>
     <span>RP2040</span>
-    <span>12 of 26 GPIO used</span>
-    <span>9 nets</span>
+    <span>13 of 26 GPIO used</span>
+    <span>13 nets</span>
   </div>
 </header>
 
@@ -270,7 +270,7 @@ Half + Quarter build has room to solder.</p>
     <div class="pin usesig"><span class="n">12</span><span class="g">GP9</span><span class="use">Buzzer → 1 k → Q1 base</span></div>
     <div class="pin useg"><span class="n">13</span><span class="g">GND</span><span class="use">Q1 emitter</span></div>
     <div class="pin free"><span class="n">14</span><span class="g">GP10</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">15</span><span class="g">GP11</span><span class="use">—</span></div>
+    <div class="pin usesig"><span class="n">15</span><span class="g">GP11</span><span class="use">RTC SQW — 1 Hz</span></div>
     <div class="pin free"><span class="n">16</span><span class="g">GP12</span><span class="use">—</span></div>
     <div class="pin usesig"><span class="n">17</span><span class="g">GP13</span><span class="use">Encoder SW</span></div>
     <div class="pin useg"><span class="n">18</span><span class="g">GND</span><span class="use">Encoder GND</span></div>
@@ -351,6 +351,19 @@ Half + Quarter build has room to solder.</p>
   </div>
 
   <div class="mod">
+    <h3>DS3231 RTC <span class="tag">0x68</span></h3>
+    <table>
+      <tr><td>Vin</td><td class="mono">pin 36 — 3.3 V</td></tr>
+      <tr><td>GND</td><td class="mono">pin 38</td></tr>
+      <tr><td>SDA</td><td class="mono">pin 6</td></tr>
+      <tr><td>SCL</td><td class="mono">pin 7</td></tr>
+      <tr><td>SQW</td><td class="mono">pin 15 — optional</td></tr>
+      <tr><td>32K / RST</td><td>not connected</td></tr>
+      <tr><td>Battery</td><td>CR1220, fit before closing up</td></tr>
+    </table>
+  </div>
+
+  <div class="mod">
     <h3>Rotary encoder <span class="tag">KY-040</span></h3>
     <table>
       <tr><td>+</td><td class="mono">pin 36 — 3.3 V</td></tr>
@@ -411,10 +424,11 @@ below is the same copper. Tick each row off as it is joined.</p>
   <tr><th>Net</th><th>Every point on it</th></tr>
   <tr><td class="mono"><strong>GND</strong></td><td>Pico 3, 8, 13, 18, 23, 28, 33, 38 · ring GND · digits GND · LCD GND · SCD40 GND · encoder GND · arcade switch leg · arcade lamp − · gas GND · Q1 emitter · divider foot · C1 − · C2 · C4 · USB-C GND</td></tr>
   <tr><td class="mono"><strong>5 V</strong></td><td>USB-C VBUS · ring 5 V · digits 5 V · gas VCC · buzzer + · C1 + · D1 anode <em>(bench: Pico pin 40 instead of the breakout)</em></td></tr>
-  <tr><td class="mono"><strong>3V3</strong></td><td>Pico 36 · LCD VCC · SCD40 VIN · encoder + · C4</td></tr>
+  <tr><td class="mono"><strong>3V3</strong></td><td>Pico 36 · LCD VCC · SCD40 VIN · DS3231 Vin · encoder + · C4</td></tr>
   <tr><td class="mono"><strong>VSYS</strong></td><td>Pico 39 · D1 cathode <em>(banded end)</em></td></tr>
-  <tr><td class="mono">SDA</td><td>Pico 6 · LCD SDA · SCD40 SDA</td></tr>
-  <tr><td class="mono">SCL</td><td>Pico 7 · LCD SCL · SCD40 SCL</td></tr>
+  <tr><td class="mono">SDA</td><td>Pico 6 · LCD SDA · SCD40 SDA · DS3231 SDA</td></tr>
+  <tr><td class="mono">SCL</td><td>Pico 7 · LCD SCL · SCD40 SCL · DS3231 SCL</td></tr>
+  <tr><td class="mono">SQW</td><td>Pico 15 → DS3231 SQW <em>(internal pull-up, no resistor)</em></td></tr>
   <tr><td class="mono">RING</td><td>Pico 4 → R1 → ring DIN <em>(R1 at the ring end)</em></td></tr>
   <tr><td class="mono">DIGIT</td><td>Pico 10 → digit 1 DIN, <strong>no external resistor</strong>; DOUT chains on</td></tr>
   <tr><td class="mono">BUZZ</td><td>Pico 12 → R8 → Q1 base</td></tr>
@@ -474,6 +488,32 @@ Sized for the Raspberry Pi adapter's 5.1 V, not a round 5.0 V.</p>
   <tr><td class="mono">5.10 V nominal</td><td class="mono">3.111 V</td><td class="mono">94.3 %</td><td>Pi adapter</td></tr>
   <tr><td class="mono">5.36 V worst case</td><td class="mono">3.270 V</td><td class="mono">99.1 %</td><td>Still under the rail</td></tr>
 </table>
+</div>
+
+<h2>Why an RTC in a WiFi box</h2>
+<p class="lede">The clock was going to come from NTP. The DS3231 changes that, and it is
+worth being clear about which one is in charge.</p>
+
+<div class="note">
+  <strong>NTP cannot answer until WiFi associates</strong> — seconds of blank display on
+  every power-up, and nothing at all if the router is down or the box is somewhere else.
+  For a toy whose whole specification is <em>instant-on and survives a yanked plug</em>,
+  that is the wrong clock. The DS3231 has the time on the bus immediately and keeps it on a
+  CR1220 with the power off. <strong>NTP still runs — but to correct the RTC, not to be the
+  clock.</strong>
+</div>
+
+<div class="note">
+  <strong>It is a TCXO, which is the point.</strong> A plain crystal RTC drifts minutes a
+  month as the room warms and cools. This one holds ±2 ppm — about two minutes a year — so
+  even with the WiFi password wrong all year, the clock stays right.
+</div>
+
+<div class="note">
+  <strong>Three sets of pull-ups now share the bus.</strong> LCD, SCD40 and DS3231 each
+  bring their own 10 kΩ, so the bus sees roughly 3.3 kΩ. That is fine — about 1 mA of sink
+  against the 3 mA these parts can take — and for a bit-banged bus the stiffer pull-up
+  actually sharpens the rising edges.
 </div>
 
 <h2>Digit data line</h2>
@@ -609,7 +649,7 @@ after two joints is a fault you can see; found after forty, it is a hunt.</p>
   <tr><td class="mono">2</td><td>Ground rail, every GND point</td><td>Continuity from Pico pin 3 to every other GND point.</td></tr>
   <tr><td class="mono">3</td><td>USB-C breakout, D1, C1</td><td><strong>Meter before anything is powered:</strong> 5 V rail to GND must <em>not</em> be a short. Then power the panel port alone — 5 V on the rail, ~4.8 V on VSYS.</td></tr>
   <tr><td class="mono">4</td><td>3V3 from pin 36</td><td>3.3 V present. The Pico should now boot from the panel port on its own.</td></tr>
-  <tr><td class="mono">5</td><td>I²C pair + LCD + SCD40 + C4</td><td>Flash and watch the scan: <span class="mono">0x3E</span>, <span class="mono">0x60</span>, <span class="mono">0x62</span>.</td></tr>
+  <tr><td class="mono">5</td><td>I²C pair + LCD + SCD40 + DS3231 + C4</td><td>Flash and watch the scan: <span class="mono">0x3E</span>, <span class="mono">0x60</span>, <span class="mono">0x62</span>, <span class="mono">0x68</span>.</td></tr>
   <tr><td class="mono">6</td><td>Ring, with R1 at the ring</td><td>Comet animation runs.</td></tr>
   <tr><td class="mono">7</td><td>Digits, straight to pin 10</td><td>All four digits now — then raise <span class="mono">DIGITS_FITTED</span> to 4.</td></tr>
   <tr><td class="mono">8</td><td>Q1, R8, buzzer</td><td>Startup tune. Loud, if the transistor is the right way round.</td></tr>
@@ -637,6 +677,8 @@ after two joints is a fault you can see; found after forty, it is a hunt.</p>
   <tr><td>Digit pixels</td><td>8 per digit: offsets 0–6 are segments a–g, offset 7 is the dot.</td></tr>
   <tr><td>Buzzer notes</td><td>Low notes are quieter <em>and</em> draw more current. It is magnetic, resonant at 2300 Hz.</td></tr>
   <tr><td>The transistor</td><td>It is on the buzzer, not the illuminated button — the opposite way round to the guess.</td></tr>
+  <tr><td>RTC <span class="mono">SQW</span></td><td>Open drain. It needs a pull-up to read as anything; GP11's internal one is enough.</td></tr>
+  <tr><td>RTC registers</td><td>BCD, not binary. And the address pointer wraps 12h → 00h mid-read.</td></tr>
 </table>
 </div>
 

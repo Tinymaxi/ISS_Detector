@@ -38,9 +38,10 @@ including the three debug pins — so a spare plain Pico can act as an SWD probe
 | Function | GPIO | Pin |
 |---|---|---|
 | NeoPixel ring data | GP2 | 4 |
-| I2C SDA / SCL (SCD40 + LCD) | GP4 / GP5 | 6 / 7 |
+| I2C SDA / SCL (LCD + SCD40 + DS3231) | GP4 / GP5 | 6 / 7 |
 | NeoPixel digits data | GP7 | 10 |
 | Buzzer (via 2N2222A) | GP9 | 12 |
+| DS3231 RTC `SQW` — 1 Hz tick | GP11 | 15 |
 | Rotary encoder SW / CLK / DT | GP13 / GP14 / GP15 | 17 / 19 / 20 |
 | Arcade button / lamp | GP16 / GP17 | 21 / 22 |
 | MiCS-5524 `A0` / `EN` | GP26 / GP27 | 31 / 32 |
@@ -58,6 +59,17 @@ Melodies live in A6–F7 (1760–2794 Hz), straddling resonance. Off resonance a
 quiet *and* current-hungry — its impedance is mostly inductive reactance, which falls with
 frequency, so low notes draw more current to make less noise.
 
+The **DS3231 RTC** (Adafruit 3013, address 0x68) is what the box actually keeps time by. NTP
+cannot answer until WiFi associates — seconds of blank display on every power-up, and nothing at
+all if the router is down — which is the wrong clock for a toy specified as instant-on and
+yank-proof. The DS3231 answers immediately and holds the time on a CR1220 with the power off.
+NTP still runs, but to discipline the RTC rather than to be the clock. Being a TCXO it holds
+±2 ppm, roughly two minutes a year, so it stays right even if WiFi never works again.
+
+Its `SQW` pin gives a 1 Hz square wave on GP11 for a hardware-exact seconds tick. It is open-drain,
+so it needs a pull-up — the RP2040's internal one, no resistor. Strictly optional, wired anyway
+because adding a wire to a closed box is much harder than fitting one now.
+
 The gas sensor runs at 5 V and its `A0` reaches the 3.3 V ADC through a divider: 10 k from `A0`,
 15.64 k (10 k + 4.7 k + 470 + 470 in series) to ground. Sized for the Raspberry Pi adapter's
 5.1 V rather than a round 5.0 V — 3.111 V at nominal, 3.270 V at the +5% worst case, 94% of the
@@ -71,7 +83,8 @@ Pins are spread deliberately: the final build is hand-soldered onto Adafruit Per
 (half-size plus quarter-size), so unrelated signals get a free pin between them. Pins from the same
 module stay adjacent, since they arrive as one bundle.
 
-Peripherals: SCD40 CO2+temp+humidity (0x62) and/or SHT3x temp+humidity (0x44), DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
+Peripherals: SCD40 CO2+temp+humidity (0x62) and/or SHT3x temp+humidity (0x44), DS3231 precision RTC (0x68),
+DFRobot Gravity LCD1602 RGB (DFR0464), 24-pixel NeoPixel ring,
 32-pixel NeoPixel seven-segment (4 digits x 8 pixels, own data line), MiCS-5524 gas sensor, rotary encoder, arcade button, buzzer.
 
 **On the breadboard**, power comes through the Pico's own USB connector — a USB-C Raspberry Pi

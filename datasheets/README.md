@@ -15,6 +15,7 @@ the folder is that the numbers survive.
 | `pca9633-backlight.pdf` | NXP PCA9633 | The LCD's RGB backlight — MODE1 wake-up, PWM registers |
 | `ws2812b.pdf` | WorldSemi WS2812B | Ring and digit pixels: timing, GRB order |
 | `rgbdigit.pdf` | RGBDigit 1" 7-segment | **Read the notes below — it changes two build decisions** |
+| `ds3231.pdf` | Maxim DS3231 RTC | Register map, 1 Hz SQW, alarms, aging offset |
 | `mics-5524.pdf` | SGX MiCS-5524 | Gas sensor: heater, `EN` polarity, output range |
 | `2n2222a.pdf` | 2N2222A NPN | Buzzer driver |
 | `1n5817-schottky.pdf` | 1N5817 | USB-C VBUS → VSYS, forward drop |
@@ -29,6 +30,10 @@ the folder is that the numbers survive.
 carries a 100y.com.tw watermark on every page. The register map is unchanged;
 check [NXP's page](https://www.nxp.com/products/power-drivers/lighting-driver-and-controller-ics/led-drivers/4-bit-fm-plus-ic-bus-led-driver:PCA9633)
 if a number ever looks wrong.
+
+**`ds3231.pdf` is Adafruit's mirror** of the Maxim datasheet, hosted under
+product 3013. Analog Devices, who now own Maxim, serve a broken HTTP/2 stream to
+anything that is not a browser.
 
 **`2n2222a.pdf` and `1n5817-schottky.pdf` are mirrors too** — onsemi blocks
 automated requests. They come from MIT's course reference collection and Vishay

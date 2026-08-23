@@ -13,6 +13,7 @@ the binaries are gitignored, the script is not.
 | `minty-permaproto.step` | Perma-Proto Mint Tin size — 91.4 × 56.9 × 1.6 mm | [Adafruit 723](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/723%20Minty%20Perma-Proto) |
 | `arcade-button-30mm.step` | Arcade button, 30 mm | [Adafruit 471](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/471%20Arcade%20Button%2030mm) |
 | `usb-c-breakout-4090.step` | USB-C breakout — 24.79 × 14.38 × **4.20** mm | [Adafruit 4090](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/4090%20USB%20C%20Breakout) |
+| `ds3231-rtc-3013.step` | DS3231 precision RTC — see the note below on its size | [Adafruit 3013](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/3013%20DS3231%20RTC) |
 | `sparkfun-solderable-breadboard-12070.stl` | Solder-able Breadboard — **93.98 × 63.50 × 1.60 mm** | [SparkFun 3D_Models](https://github.com/sparkfun/3D_Models/tree/master/products/12070) — **STL, not STEP** |
 
 **The quarter-size model is an outline only.** It has 6 cylindrical surfaces against the
@@ -35,6 +36,18 @@ height.
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
 | RGB digit module | No CAD model, but the [datasheet](../datasheets/rgbdigit.pdf) gives the housing exactly: **34.0 × 24.0 mm**, 2.54 mm pin pitch, 3-in/3-out. |
 
+
+## DS3231 RTC 3013 — the model is bigger than the board
+
+Adafruit list the PCB as **25.4 × 17.8 mm**. The STEP's bounding box is
+**32.36 × 24.68 × 3.20 mm** — about 7 mm larger in both axes, from features
+overhanging the board outline.
+
+Unlike the 4090 there is no stray-geometry artifact here: the Z distribution is
+smooth from 0 to 3.20 mm with no isolated cluster. But **3.20 mm cannot include
+the CR1220 holder** — the cell alone is 2.0 mm thick and it sits in a holder on
+the underside. Treat the model as the board and its topside parts only, and
+measure the real thing for the battery clearance.
 
 ## USB-C breakout 4090 — the height is not 11.7 mm
 

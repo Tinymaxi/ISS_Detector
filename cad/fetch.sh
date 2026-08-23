@@ -28,6 +28,7 @@ get "$ADA/1608%20perma-proto%20quarter/1608%20perma-proto%20quarter.step" "perma
 get "$ADA/723%20Minty%20Perma-Proto/723%20Minty%20Perma-Proto.step" "minty-permaproto.step"
 get "$ADA/471%20Arcade%20Button%2030mm/471%20Arcade%20Button%2030mm.step" "arcade-button-30mm.step"
 get "$ADA/4090%20USB%20C%20Breakout/4090%20USB%20C%20Breakout.step" "usb-c-breakout-4090.step"
+get "$ADA/3013%20DS3231%20RTC/3013%20DS3231%20RTC.step" "ds3231-rtc-3013.step"
 
 # The 63.5 mm wide protoboard. SparkFun publish an STL, not a STEP, and the
 # board is a plain rectangle with no mounting holes -- so the dimensions in
