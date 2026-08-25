@@ -30,6 +30,14 @@ tables, schematics for the gas divider, buzzer driver and power inlet, plus the 
 [`docs/wiring.html`](docs/wiring.html) is its source; open it in any browser and print, or run
 `./docs/build-wiring.sh` to re-render the PDF after an edit.
 
+## Fabricated PCB — scouting
+
+[`docs/pcb-assembly.md`](docs/pcb-assembly.md) records what a move from breakouts to bare SMD
+parts on a fabricated board would involve: MPNs for the three sensor modules, the support
+circuitry each breakout was providing, SMD equivalents for the discretes, Fusion library
+sources, and quotes from AISLER and PCBWay. **Scouting notes, not settled design** — the build
+described above is still the build.
+
 ## Hardware
 
 Raspberry Pi Pico WH (RP2040), C++17 on the Pico SDK. The "H" means headers are pre-soldered,
