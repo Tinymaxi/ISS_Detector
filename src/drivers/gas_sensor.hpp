@@ -11,8 +11,9 @@
 // 3.3 V ADC through a resistor divider. The divider ratio is passed in rather
 // than assumed, because it depends on which resistors were to hand.
 //
-// EN reads backwards from the usual convention: driving it HIGH disables the
-// heater. We hold it low.
+// EN drives Q2's gate directly, so HIGH enables the heater and we hold it high.
+// The Adafruit breakout was the opposite — it had its own switching transistor
+// behind EN — so this flipped when the design moved to the bare sensor.
 
 #pragma once
 

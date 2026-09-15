@@ -39,8 +39,8 @@ void GasSensor::init() {
 }
 
 void GasSensor::set_heater(bool on) {
-    // Inverted: HIGH disables.
-    gpio_put(en_pin_, on ? 0 : 1);
+    // Drives Q2's gate: HIGH enables. R11 holds it off until this runs.
+    gpio_put(en_pin_, on ? 1 : 0);
 }
 
 uint16_t GasSensor::read_raw() {

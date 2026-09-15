@@ -27,13 +27,18 @@
 //   pin 18  GND   encoder GND   │ same bundle
 //   pin 19  GP14  encoder CLK   │
 //   pin 20  GP15  encoder DT   ─┘
-//   pin 21  GP16  arcade button ─┐ same bundle
-//   pin 22  GP17  arcade lamp   ─┘
+//   pin 25  GP19  arcade button ─┐ same bundle
+//   pin 26  GP20  arcade lamp   ─┘
+//   pin 27  GP21  PIR REL (motion out) ─┐
+//   pin 28  GND   PIR ground            │ same bundle
+//   pin 29  GP22  PIR OEN (enable)     ─┘
 //   pin 31  GP26  gas A0   ─┐ same bundle
 //   pin 32  GP27  gas EN   ─┘
 //   pin 33  AGND  analog ground, right next to the gas divider
 //
-// Rails: 3V3 = pin 36, VBUS (5 V) = pin 40, GND = 3/8/13/18/23/28/38.
+// Rails: 3V3 = pin 36, GND = 3/8/13/18/23/28/38. On the fabricated board 5 V
+// enters at VSYS (pin 39) from the panel USB-C breakout and pin 40 is unused;
+// on the Perma-Proto build it arrives at VBUS (pin 40) instead.
 
 #pragma once
 
@@ -95,15 +100,17 @@ constexpr uint PIN_ENCODER_CLK = 14;  // physical 19, the PIO base pin
 constexpr uint PIN_ENCODER_DT  = 15;  // physical 20
 
 // --- Arcade button ---------------------------------------------------------
-constexpr uint PIN_BUTTON      = 16;  // physical 21, internal pull-up, to GND
-constexpr uint PIN_BUTTON_LAMP = 17;  // physical 22, via transistor
+constexpr uint PIN_BUTTON      = 19;  // physical 25, internal pull-up, to GND
+constexpr uint PIN_BUTTON_LAMP = 20;  // physical 26, via Q3 from the 5 V rail
 
 // --- Buzzer ----------------------------------------------------------------
 constexpr uint PIN_BUZZER = 9;        // physical 12, PWM
 
 // --- MiCS-5524 gas sensor --------------------------------------------------
-// EN is inverted: driving it LOW enables the heater. A0 arrives through a
-// 10k/15k divider because the sensor runs at 5 V and the ADC tolerates 3.3 V.
+// EN drives Q2's gate directly: HIGH enables the heater. The Adafruit breakout
+// was the other way round, because it carried its own switching transistor.
+// A0 arrives through a 10k/15.4k divider because the sensor runs at 5 V and the
+// ADC tolerates 3.3 V.
 constexpr uint PIN_GAS_AO      = 26;  // physical 31, ADC0
 constexpr uint GAS_ADC_CHANNEL = 0;
 constexpr uint PIN_GAS_EN      = 27;  // physical 32
