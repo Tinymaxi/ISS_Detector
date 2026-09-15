@@ -16,6 +16,149 @@ the binaries are gitignored, the script is not.
 | `ds3231-rtc-3013.step` | DS3231 precision RTC — see the note below on its size | [Adafruit 3013](https://github.com/adafruit/Adafruit_CAD_Parts/tree/main/3013%20DS3231%20RTC) |
 | `sparkfun-solderable-breadboard-12070.stl` | Solder-able Breadboard — **93.98 × 63.50 × 1.60 mm** | [SparkFun 3D_Models](https://github.com/sparkfun/3D_Models/tree/master/products/12070) — **STL, not STEP** |
 
+### Bare-part models — the fabricated board
+
+Added when the build moved from breakouts to bare parts. Everything above is a
+breakout or an off-board item; these are the parts on the PCB itself.
+
+| File | Part | Size (mm) | Source |
+|---|---|---|---|
+| `jst-xh-b2b.step` | `J1` — JST XH 2-way | 7.40 × 5.75 × **7.00** above board | [KiCad 3D library](https://gitlab.com/kicad/libraries/kicad-packages3D) |
+| `jst-xh-b4b.step` | `J2` `J5` — XH 4-way | 12.40 × 5.75 × **7.00** | KiCad |
+| `jst-xh-b5b.step` | `J4` `J6` `J7` — XH 5-way | 14.90 × 5.75 × **7.00** | KiCad |
+| `soic-16w-ds3231.step` | `U4` — DS3231SN | 10.30 × 10.30 × 2.75 | KiCad |
+| `soic-14-sn74hct125.step` | `U5` — SN74HCT125D | 6.00 × 8.70 × 1.75 | KiCad |
+| `sot-23.step` | `Q1` `Q2` `Q3` | 2.50 × 3.00 × 1.20 | KiCad |
+| `lcsc/scd41.obj` | `U3` — SCD41-D-R2 | 10.10 × 10.10 × **6.32** | LCSC `C3659294` |
+| `lcsc/mics-5524.obj` | `U2` — MiCS-5524 | 7.00 × 5.00 × 1.52 | LCSC `C3659348` |
+| `lcsc/pir-bs612.obj` | `U6` — BS612 | 9.85 × 9.10 × 9.20 *(incl. leads)* | LCSC `C389589` |
+| `lcsc/veml7700.obj` | `U7` — VEML7700 | 6.80 × 2.35 × 3.00 | LCSC `C504893` |
+| `lcsc/buzzer-qmb-09b-05.obj` | `BZ1` | Ø9.00 × **5.5** above board | LCSC `C161819` |
+| `lcsc/cr1220-holder.obj` | `BT1` | 19.76 × 14.90 × 4.90 | LCSC `C70381` |
+
+### The Fresnel lens — `make-lens.py`
+
+**No public model exists for the `SB-F-02`.** LCSC hold it as `C89924` with no CAD data,
+Senba publish only a datasheet, and what turns up on GrabCAD and Sketchfab is generic
+Fresnel geometry. [`make-lens.py`](make-lens.py) revolves it from the dimensioned drawing
+in [`../datasheets/lens-SB-F-02.pdf`](../datasheets/lens-SB-F-02.pdf), which makes it the
+manufacturer's own geometry rather than someone's approximation.
+
+| File | Result |
+|---|---|
+| `lens-sb-f-02.step` | **Ø25.75 × 16.90 mm**, z −5.40…+11.50, 4352 faces, 0 non-manifold edges, χ = 2 |
+
+Dimensioned values used as-is: dome **R11.5** standing **11.5** above the flange, flange
+**Ø25.75 × 1.5** thick, bore **Ø8.10**, overall **16.9**.
+
+**Two numbers are not on the drawing** and were scaled off the side view against the 8.10
+bore: the skirt outer diameter (**Ø12.30**) and the bore depth (3.9 mm blind). Nothing else
+depends on either — change them at the top of the script if a real part says otherwise.
+
+> ⚠️ **The drawing does not reconcile with itself.** 11.5 above the flange plus 5.6 below
+> is 17.1, but the overall is given as 16.9. Both carry ±0.15. The model favours **R11.5 and
+> the 11.5 protrusion** — the two the enclosure actually needs — and takes the skirt to
+> −5.4 so the overall lands on 16.9 exactly. If you seat the lens off its *underside*
+> instead, add the missing 0.2 mm.
+
+The Fresnel groove pattern on the inner surface is not modelled: it is the optical point of
+the part and mechanically irrelevant to a housing.
+
+### Generated solids — `make-primitives.py`
+
+Fusion's Electronics library binds a **solid** to a footprint. STEP arrives as one; an
+OBJ arrives as a mesh and will not bind. Rather than mesh-convert each part by hand,
+[`make-primitives.py`](make-primitives.py) writes exact STEP B-reps for the parts whose
+shape is simple enough that a solid is indistinguishable from the real geometry:
+
+| File | Part | Size (mm) | Bodies |
+|---|---|---|---|
+| `buzzer-qmb-09b-05.step` | `BZ1` | Ø9.044 × 5.50 | 1 |
+| `mics-5524.step` | `U2` | 7.000 × 5.000 × 1.52 | 1 |
+| `veml7700.step` | `U7` | 6.800 × 2.350 × 3.00 | 1 |
+| `pir-bs612.step` | `U6` | Ø9.144 base × 0.50, Ø8.20 can to 4.70 | 2 |
+| `scd41.step` | `U3` | 10.10 sq base × 0.88, 7.86 sq body to 6.30 | 2 |
+| `cr1220-holder.step` | `BT1` | 19.76 × 14.90 tabs × 0.55, body to 4.05 | 2 |
+
+Cylinders use a **circumscribed** 32-gon, so the model is never smaller than the part —
+a clearance body should err large. Everything sits on **z = 0** standing up, so it drops
+straight onto the board plane. Dimensions are measured from the LCSC meshes in `lcsc/`
+and cross-checked against the datasheets.
+
+The PIR is deliberately two bodies rather than one: the shoulder between the Ø9.10 base
+and the Ø8.20 can is what the Fresnel lens skirt keys on, and that relationship is still
+unresolved — see the PIR section of [`../docs/pcb-assembly.md`](../docs/pcb-assembly.md).
+
+### Mesh-derived solids — `mesh-to-step.py`
+
+The LCSC meshes are *display* models: the holder had **211 open boundary edges**, so
+nothing will treat it as a solid. [`mesh-to-step.py`](mesh-to-step.py) does what Fusion's
+Convert Mesh does — welds coincident vertices, chains the open boundaries into loops, fills
+them, and emits a `MANIFOLD_SOLID_BREP`:
+
+```
+python3 mesh-to-step.py lcsc/cr1220-holder.obj cr1220-holder-detailed.step "CR1220-2"
+```
+
+| File | Part | Result |
+|---|---|---|
+| `scd41-detailed.step` | `U3` | 10.10 × 10.10 × 6.32, 2540 faces, χ = 2 |
+| `cr1220-holder-detailed.step` | `BT1` | 19.76 × 14.90 × 4.90, 4418 faces, χ = −2 |
+
+Both come out **watertight — 0 non-manifold edges** — and their bounding boxes match the
+source meshes exactly. The Euler characteristics are a sanity check on shape: χ = 2 is a
+simple closed body, which the SCD41 is; χ = −2 is genus 2, which the holder is, because the
+cell aperture and peg holes pass through it.
+
+This one keeps the spring clips, the cell recess and the locating pegs — everything the
+box version throws away. Use it when you want the holder to *look* like a holder; the
+primitive is still there if you only need the envelope.
+
+**Most "holes" in these meshes are not holes.** Both models are riddled with
+**T-junctions** — an edge divided on one side of the surface but not the other. They present
+as boundary loops, but every such loop is *collinear*: a line out and back, enclosing no
+area. Fan-filling one produces nothing but zero-area slivers, and dropping those slivers
+reopens the boundary, so the naive repair oscillates forever. The fix is to split the long
+edge at the vertices sitting on it. The SCD41 turned out to have **no holes at all** — all
+90 of its boundary edges were T-junctions.
+
+Genuine holes do exist (the holder had 6 after repair) and get fan-filled, with two further
+traps handled: a triangular hole is filled with one triangle rather than a fan, because the
+centroid can land on an existing vertex and give an edge shared by four faces; and a
+boundary loop can pinch through the same vertex twice, like a figure eight, which is split
+before filling.
+
+**The two numbers to trust** are printed at the end: non-manifold edges must be **0**, and
+the emitted face count must equal the triangle count. The second matters because a
+zero-area triangle cannot become a STEP face — it gets skipped, and a skipped face silently
+unseals a shell that the mesh check said was closed.
+
+**The SCD41 and the holder are stepped, not boxed.** Their profiles were sliced out of the
+LCSC meshes rather than guessed: the SCD41 has a full-width base plate 0.88 tall with the
+sensing body stepping in to 7.86 square above it — **that upper face is the gas-permeable
+membrane, and it is what the enclosure vent must sit over.** The holder reaches its full
+19.76 mm only at tab level; the plastic steps in above that, and it is **not centred on its
+own origin** — the body sits 0.46 mm toward +x. Its locating pegs run 0.85 mm below the
+board and are omitted, since the case never sees them.
+
+With these two, **every part on the board now has a solid.** The fiducials are the only
+things without one, and they are flat copper — there is nothing to model.
+
+
+**The KiCad models are STEP solids; the LCSC ones are OBJ meshes.** Fusion imports
+both, but a mesh cannot be used as a cutting tool — for a clearance pocket, model a
+primitive from the dimensions above and keep the mesh only as a visual check.
+
+**Still missing: the `SB-F-02` Fresnel lens.** It is a mechanical part with no LCSC
+entry and no public model. It is also a simple revolve — flange Ø25.75 × 1.5 thick,
+dome R11.5 standing 11.5 above the flange, skirt 5.6 below with a Ø8.10 bore, 16.9
+overall. See the PIR section of [`../docs/pcb-assembly.md`](../docs/pcb-assembly.md).
+
+**Two heights that surprised us**, both confirmed against the models: the buzzer stands
+**5.5 mm**, not the 4.5 the CST-951AP datasheet quotes for its sibling; and the JST
+headers are **7.00 mm** before any allowance for cable bend radius. Those two set the
+depth of the rear cavity, along with `C1`.
+
 **The quarter-size model is an outline only.** It has 6 cylindrical surfaces against the
 half-size model's 426, so the mounting holes are there but the perforated grid is not. Fine for
 checking fit and clearance in an enclosure; useless for visualising where parts sit on the grid.
@@ -34,7 +177,7 @@ height.
 | DFR0464 LCD1602 RGB | [SnapMagic](https://www.snapeda.com/parts/DFR0464/DFRobot/view-part/) has a 3D model; DFRobot's wiki has dimensions. |
 | KY-040 rotary encoder | Generic part — [GrabCAD](https://grabcad.com/library/tag/ky-040) has several. |
 | Piezo buzzer | Generic — pick a GrabCAD model matching your disc diameter. |
-| RGB digit module | No CAD model, but the [datasheet](../datasheets/rgbdigit.pdf) gives the housing exactly: **34.0 × 24.0 mm**, 2.54 mm pin pitch, 3-in/3-out. |
+| RGB digit module | No CAD model. **Measure, do not trust the datasheet** — [`rgbdigit.pdf`](../datasheets/rgbdigit.pdf) is the 1" module and ours is the 0.8". Callipers give **19.9 × 27.6 mm**, 2.54 mm pin pitch, 3-in/3-out. |
 
 
 ## DS3231 RTC 3013 — the model is bigger than the board
@@ -98,7 +241,7 @@ matter — a hole diameter beats a mesh for enclosure work.
 | Arcade button AB30L5-B | **Ø 28.0 mm (M28)** | ~33 mm ⌀, ~29 mm deep | [datasheet](../datasheets/arcade-button-AB30L5-B.pdf) |
 | KY-040 encoder | **Ø 7 mm** threaded bush | PCB ~26 × 19 mm; knob 15 mm ⌀ × 16.5 mm | Supplier listings — **varies, measure yours** |
 | Buzzer UDB-05B | Ø ~9.5 mm if front-mounted | **Ø 9.2 × 9 mm**, 4 mm pin pitch | [datasheet](../datasheets/buzzer-UDB-05B.pdf) |
-| RGBDigit 1" | **34.0 × 24.0 mm** per digit | digit 25.40 mm, ±0.25 | [datasheet](../datasheets/rgbdigit.pdf) |
+| RGBDigit **0.8"** | **19.9 × 27.6 mm** per digit, measured | Fusion footprint `RGBDIGIT_08"_6PIN` is 20.32 × 27.94 nominal | ⚠️ [datasheet](../datasheets/rgbdigit.pdf) is the **1"** part — mechanical figures in it do not apply |
 
 **KY-040 dimensions vary between suppliers** — 15 × 16.5, 26 × 19, 30 × 18 and
 32 × 19 mm are all listed by different sellers for the "same" module. Measure the

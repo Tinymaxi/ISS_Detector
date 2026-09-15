@@ -279,15 +279,15 @@ Half + Quarter build has room to solder.</p>
   </div>
   <div class="col">
     <div class="colhead">Right edge · pins 21–40</div>
-    <div class="pin usesig"><span class="n">21</span><span class="g">GP16</span><span class="use">Arcade switch</span></div>
-    <div class="pin usesig"><span class="n">22</span><span class="g">GP17</span><span class="use">Arcade lamp +</span></div>
+    <div class="pin free"><span class="n">21</span><span class="g">GP16</span><span class="use">—</span></div>
+    <div class="pin free"><span class="n">22</span><span class="g">GP17</span><span class="use">—</span></div>
     <div class="pin useg"><span class="n">23</span><span class="g">GND</span><span class="use">Switch + lamp −</span></div>
     <div class="pin free"><span class="n">24</span><span class="g">GP18</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">25</span><span class="g">GP19</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">26</span><span class="g">GP20</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">27</span><span class="g">GP21</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">28</span><span class="g">GND</span><span class="use">—</span></div>
-    <div class="pin free"><span class="n">29</span><span class="g">GP22</span><span class="use">—</span></div>
+    <div class="pin usesig"><span class="n">25</span><span class="g">GP19</span><span class="use">Arcade switch</span></div>
+    <div class="pin usesig"><span class="n">26</span><span class="g">GP20</span><span class="use">Arcade lamp +</span></div>
+    <div class="pin usesig"><span class="n">27</span><span class="g">GP21</span><span class="use">PIR REL — motion out</span></div>
+    <div class="pin useg"><span class="n">28</span><span class="g">GND</span><span class="use">PIR GND</span></div>
+    <div class="pin usesig"><span class="n">29</span><span class="g">GP22</span><span class="use">PIR OEN — enable</span></div>
     <div class="pin free"><span class="n">30</span><span class="g">RUN</span><span class="use">—</span></div>
     <div class="pin usesig"><span class="n">31</span><span class="g">GP26</span><span class="use">Gas A0 ← divider · ADC0</span></div>
     <div class="pin usesig"><span class="n">32</span><span class="g">GP27</span><span class="use">Gas EN — low = heater on</span></div>
@@ -297,8 +297,8 @@ Half + Quarter build has room to solder.</p>
     <div class="pin use33"><span class="n">36</span><span class="g">3V3</span><span class="use">LCD · SCD40 · Encoder +</span></div>
     <div class="pin free"><span class="n">37</span><span class="g">3V3_EN</span><span class="use">—</span></div>
     <div class="pin useg"><span class="n">38</span><span class="g">GND</span><span class="use">Ground rail</span></div>
-    <div class="pin use5"><span class="n">39</span><span class="g">VSYS</span><span class="use">← 1N5817 · box only</span></div>
-    <div class="pin use5"><span class="n">40</span><span class="g">VBUS</span><span class="use">Ring · Digits · Gas VCC</span></div>
+    <div class="pin use5"><span class="n">39</span><span class="g">VSYS</span><span class="use">5 V in · ring · digits · gas VCC</span></div>
+    <div class="pin free"><span class="n">40</span><span class="g">VBUS</span><span class="use">— leave unconnected</span></div>
   </div>
 </div>
 
@@ -377,9 +377,20 @@ Half + Quarter build has room to solder.</p>
   <div class="mod">
     <h3>Arcade button <span class="tag">illuminated</span></h3>
     <table>
-      <tr><td>Switch</td><td class="mono">pin 21 · pin 23</td></tr>
-      <tr><td>Lamp +</td><td class="mono">pin 22</td></tr>
+      <tr><td>Switch</td><td class="mono">pin 25 · pin 23</td></tr>
+      <tr><td>Lamp +</td><td class="mono">pin 26</td></tr>
       <tr><td>Lamp −</td><td class="mono">pin 23</td></tr>
+    </table>
+  </div>
+
+  <div class="mod">
+    <h3>PIR <span class="tag">BS612</span></h3>
+    <table>
+      <tr><td>VDD</td><td class="mono">pin 36 — 3.3 V</td></tr>
+      <tr><td>GND</td><td class="mono">pin 28</td></tr>
+      <tr><td>REL</td><td class="mono">pin 27 — motion out</td></tr>
+      <tr><td>OEN</td><td class="mono">pin 29 — or tie to VDD</td></tr>
+      <tr><td>Lens</td><td>SB-F-02, 11.5 mm focal — mandatory</td></tr>
     </table>
   </div>
 
@@ -396,7 +407,7 @@ Half + Quarter build has room to solder.</p>
   <div class="mod">
     <h3>USB-C breakout <span class="tag">Adafruit 4090</span></h3>
     <table>
-      <tr><td>VBUS</td><td class="mono">5 V rail + D1 anode</td></tr>
+      <tr><td>VBUS</td><td class="mono">5 V rail + Pico pin 39 · J1.1</td></tr>
       <tr><td>GND</td><td class="mono">ground rail</td></tr>
       <tr><td>CC1/CC2</td><td>already resistored on the board</td></tr>
       <tr><td>D+/D−</td><td>leave unconnected — power only</td></tr>
@@ -422,10 +433,9 @@ below is the same copper. Tick each row off as it is joined.</p>
 <div class="tw">
 <table>
   <tr><th>Net</th><th>Every point on it</th></tr>
-  <tr><td class="mono"><strong>GND</strong></td><td>Pico 3, 8, 13, 18, 23, 28, 33, 38 · ring GND · digits GND · LCD GND · SCD40 GND · encoder GND · arcade switch leg · arcade lamp − · gas GND · Q1 emitter · divider foot · C1 − · C2 · C4 · USB-C GND</td></tr>
-  <tr><td class="mono"><strong>5 V</strong></td><td>USB-C VBUS · ring 5 V · digits 5 V · gas VCC · buzzer + · C1 + · D1 anode <em>(bench: Pico pin 40 instead of the breakout)</em></td></tr>
-  <tr><td class="mono"><strong>3V3</strong></td><td>Pico 36 · LCD VCC · SCD40 VIN · DS3231 Vin · encoder + · C4</td></tr>
-  <tr><td class="mono"><strong>VSYS</strong></td><td>Pico 39 · D1 cathode <em>(banded end)</em></td></tr>
+  <tr><td class="mono"><strong>GND</strong></td><td>Pico 3, 8, 13, 18, 23, 28, 33, 38 · ring GND · digits GND · LCD GND · SCD40 GND · encoder GND · arcade switch leg · arcade lamp − · PIR GND · gas GND · Q1 emitter · divider foot · C1 − · C2 · C4 · USB-C GND</td></tr>
+  <tr><td class="mono"><strong>5 V</strong></td><td>USB-C VBUS · Pico 39 · ring 5 V · digits 5 V · gas VCC · buzzer + · C1 + <em>(bench: Pico pin 40 instead of the breakout)</em></td></tr>
+  <tr><td class="mono"><strong>3V3</strong></td><td>Pico 36 · LCD VCC · SCD40 VIN · DS3231 Vin · encoder + · PIR VDD · C4</td></tr>
   <tr><td class="mono">SDA</td><td>Pico 6 · LCD SDA · SCD40 SDA · DS3231 SDA</td></tr>
   <tr><td class="mono">SCL</td><td>Pico 7 · LCD SCL · SCD40 SCL · DS3231 SCL</td></tr>
   <tr><td class="mono">SQW</td><td>Pico 15 → DS3231 SQW <em>(internal pull-up, no resistor)</em></td></tr>
@@ -433,14 +443,15 @@ below is the same copper. Tick each row off as it is joined.</p>
   <tr><td class="mono">DIGIT</td><td>Pico 10 → digit 1 DIN, <strong>no external resistor</strong>; DOUT chains on</td></tr>
   <tr><td class="mono">BUZZ</td><td>Pico 12 → R8 → Q1 base</td></tr>
   <tr><td class="mono">ENC</td><td>Pico 17 → SW · 19 → CLK · 20 → DT</td></tr>
-  <tr><td class="mono">BTN</td><td>Pico 21 → switch · 22 → lamp +</td></tr>
+  <tr><td class="mono">BTN</td><td>Pico 25 → switch · 26 → lamp +</td></tr>
+  <tr><td class="mono">PIR</td><td>Pico 27 → REL · 29 → OEN · 28 → GND <em>(VDD from pin 36)</em></td></tr>
   <tr><td class="mono">GAS</td><td>Pico 31 → divider tap + C2 · Pico 32 → EN</td></tr>
 </table>
 </div>
 
 <div class="note warn">
-  <strong>Nothing else joins the 5 V rail to VSYS or to 3V3.</strong> Those three are separate
-  copper. The only link between 5 V and VSYS is through D1, and 3V3 is made by the Pico itself.
+  <strong>The 5 V rail and VSYS are the same net; 3V3 is not.</strong> The panel supply lands on
+  both together at pin 39. 3V3 is made by the Pico itself and nothing external joins it to either.
 </div>
 
 <div class="note warn">
@@ -584,7 +595,6 @@ two things we had settled.</p>
   <tr><td class="mono">C3+</td><td class="mono">100 nF</td><td>Across each pixel board</td><td>Local decoupling. Optional but cheap.</td></tr>
   <tr><td class="mono">R8</td><td class="mono">1 kΩ</td><td>Pin 12 → Q1 base</td><td>Base current limit. Anything 470 Ω–4.7 kΩ works.</td></tr>
   <tr><td class="mono">Q1</td><td class="mono">2N2222A</td><td>Buzzer low side</td><td>NPN. The buzzer's 30 mA is over the pin rating.</td></tr>
-  <tr><td class="mono">D1</td><td class="mono">1N5817</td><td>USB-C VBUS → pin 39</td><td>Schottky. Lets the panel port and micro-USB coexist.</td></tr>
   <tr><td class="mono">C4</td><td class="mono">100 nF ∥ 10 µF</td><td>SCD40 VIN → GND</td><td>Sensirion asks for both. It pulses to ~205 mA every 5 s off a 3.3 V rail the LCD also sits on — go to 100 µF if you have one.</td></tr>
 </table>
 </div>
@@ -601,30 +611,34 @@ sensor and the buzzer. One source, so nothing can back-feed anything.</p>
 
 <h3>In the finished box — panel USB-C</h3>
 <p>The Adafruit 4090 breakout gives the case a proper USB-C hole instead of a micro-USB cable poking
-out of it. That reintroduces a second supply, which is what the Schottky is for.</p>
+out of it. It lands on <strong>VSYS (pin 39)</strong>, and the 5 V rail hangs off the same net.</p>
 
-<pre class="art">  USB-C breakout
-     VBUS ●───────┬──────────────●  5 V rail
-                  │                 (pixels · gas sensor · buzzer)
+<pre class="art">  USB-C breakout · J1
+     VBUS ●───────┬──────────────●  pin 39 · VSYS
                   │
-                  └──▶│──────────●  pin 39 · VSYS
-                     D1
-                   1N5817
+                  └──────────────●  5 V rail
+                                    (pixels · gas sensor · buzzer)
 
   Pico micro-USB ●───────────────●  pin 40 · VBUS
                                     leave unconnected</pre>
 
 <div class="note">
-  <strong>The diode is what lets both ports be plugged in at once.</strong> VSYS accepts anything
-  from 1.8 to 5.5 V and the Pico's own VBUS reaches VSYS through an identical internal Schottky, so
-  whichever source is higher wins and neither drives current back into the other. That means the
-  box can stay powered from the panel while you reflash it over micro-USB.
+  <strong>VSYS is the entry point precisely because it is not VBUS.</strong> VSYS accepts anything
+  from 1.8 to 5.5 V, and the Pico's own VBUS reaches it through an internal Schottky — so whichever
+  source is higher wins and neither drives current back into the other. Plugging the micro-USB in on
+  the bench while the panel port is live is therefore safe.
 </div>
 
 <div class="note warn">
-  <strong>Pin 40 must stay unconnected in that arrangement.</strong> Tying it to the 5 V rail would
-  wire the two supplies straight together, bypassing the diode entirely — the one thing it exists
-  to prevent.
+  <strong>Pin 40 must stay unconnected.</strong> It is the same copper as the Pico's own micro-USB
+  5 V. Feeding it from the panel would wire two supplies straight together the moment a USB cable
+  goes in — which is exactly what routing to VSYS avoids.
+</div>
+
+<div class="note">
+  <strong>The 1N5817 is gone.</strong> It used to sit between the panel port and VSYS, doing the job
+  the Pico's internal Schottky already does. Feeding VSYS directly gets the same isolation for free,
+  and a boxed unit is reflashed over SWD with a Debug Probe, which supplies no power of its own.
 </div>
 
 <div class="note warn">
@@ -647,7 +661,7 @@ after two joints is a fault you can see; found after forty, it is a hunt.</p>
   <tr><th>#</th><th>Fit</th><th>Then check</th></tr>
   <tr><td class="mono">1</td><td>Pico headers / socket</td><td>It seats and sits flat. Nothing else on the board yet.</td></tr>
   <tr><td class="mono">2</td><td>Ground rail, every GND point</td><td>Continuity from Pico pin 3 to every other GND point.</td></tr>
-  <tr><td class="mono">3</td><td>USB-C breakout, D1, C1</td><td><strong>Meter before anything is powered:</strong> 5 V rail to GND must <em>not</em> be a short. Then power the panel port alone — 5 V on the rail, ~4.8 V on VSYS.</td></tr>
+  <tr><td class="mono">3</td><td>USB-C breakout, C1</td><td><strong>Meter before anything is powered:</strong> 5 V rail to GND must <em>not</em> be a short. Then power the panel port alone — 5 V on the rail and on VSYS, which are now the same net.</td></tr>
   <tr><td class="mono">4</td><td>3V3 from pin 36</td><td>3.3 V present. The Pico should now boot from the panel port on its own.</td></tr>
   <tr><td class="mono">5</td><td>I²C pair + LCD + SCD40 + DS3231 + C4</td><td>Flash and watch the scan: <span class="mono">0x3E</span>, <span class="mono">0x60</span>, <span class="mono">0x62</span>, <span class="mono">0x68</span>.</td></tr>
   <tr><td class="mono">6</td><td>Ring, with R1 at the ring</td><td>Comet animation runs.</td></tr>
