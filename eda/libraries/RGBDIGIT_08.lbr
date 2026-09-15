@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='utf-8'?>
+<eagle version="9.7.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no" />
+<setting verticaltext="up" />
+<setting extendedlayers="yes" />
+</settings>
+<grid distance="50" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm" />
+<layers>
+<layer number="1" name="Top" blackcolor="0xccc90d0c" whitecolor="0xccc90d0c" coloredcolor="0xccc90d0c" blackhighlight="0xccc90000" whitehighlight="0xccc90000" coloredhighlight="0xccc90000" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="2" name="Route2" blackcolor="0xccffe74c" whitecolor="0xccffe74c" coloredcolor="0xccffe74c" blackhighlight="0xccffd900" whitehighlight="0xccffd900" coloredhighlight="0xccffd900" fill="1" visible="no" active="yes" locked="no" />
+<layer number="3" name="Route3" blackcolor="0xcc91d178" whitecolor="0xcc91d178" coloredcolor="0xcc91d178" blackhighlight="0xcc3bd100" whitehighlight="0xcc3bd100" coloredhighlight="0xcc3bd100" fill="1" visible="no" active="yes" locked="no" />
+<layer number="4" name="Route4" blackcolor="0xccffdda1" whitecolor="0xccffdda1" coloredcolor="0xccffdda1" blackhighlight="0xccffa200" whitehighlight="0xccffa200" coloredhighlight="0xccffa200" fill="1" visible="no" active="yes" locked="no" />
+<layer number="5" name="Route5" blackcolor="0xcc5fad56" whitecolor="0xcc5fad56" coloredcolor="0xcc5fad56" blackhighlight="0xcc14ad00" whitehighlight="0xcc14ad00" coloredhighlight="0xcc14ad00" fill="1" visible="no" active="yes" locked="no" />
+<layer number="6" name="Route6" blackcolor="0xcc5e897c" whitecolor="0xcc5e897c" coloredcolor="0xcc5e897c" blackhighlight="0xcc00895e" whitehighlight="0xcc00895e" coloredhighlight="0xcc00895e" fill="1" visible="no" active="yes" locked="no" />
+<layer number="7" name="Route7" blackcolor="0xcc6f45b4" whitecolor="0xcc6f45b4" coloredcolor="0xcc6f45b4" blackhighlight="0xcc4200b4" whitehighlight="0xcc4200b4" coloredhighlight="0xcc4200b4" fill="1" visible="no" active="yes" locked="no" />
+<layer number="8" name="Route8" blackcolor="0xcc516363" whitecolor="0xcc516363" coloredcolor="0xcc516363" blackhighlight="0xcc006363" whitehighlight="0xcc006363" coloredhighlight="0xcc006363" fill="1" visible="no" active="yes" locked="no" />
+<layer number="9" name="Route9" blackcolor="0xccd6a2ad" whitecolor="0xccd6a2ad" coloredcolor="0xccd6a2ad" blackhighlight="0xccd6002e" whitehighlight="0xccd6002e" coloredhighlight="0xccd6002e" fill="1" visible="no" active="yes" locked="no" />
+<layer number="10" name="Route10" blackcolor="0xccef476f" whitecolor="0xccef476f" coloredcolor="0xccef476f" blackhighlight="0xccef003c" whitehighlight="0xccef003c" coloredhighlight="0xccef003c" fill="1" visible="no" active="yes" locked="no" />
+<layer number="11" name="Route11" blackcolor="0xccd4dcff" whitecolor="0xccd4dcff" coloredcolor="0xccd4dcff" blackhighlight="0xcc0033ff" whitehighlight="0xcc0033ff" coloredhighlight="0xcc0033ff" fill="1" visible="no" active="yes" locked="no" />
+<layer number="12" name="Route12" blackcolor="0xcc00bfb2" whitecolor="0xcc00bfb2" coloredcolor="0xcc00bfb2" blackhighlight="0xcc00bfaf" whitehighlight="0xcc00bfaf" coloredhighlight="0xcc00bfaf" fill="1" visible="no" active="yes" locked="no" />
+<layer number="13" name="Route13" blackcolor="0xcc65def1" whitecolor="0xcc65def1" coloredcolor="0xcc65def1" blackhighlight="0xcc00d1f1" whitehighlight="0xcc00d1f1" coloredhighlight="0xcc00d1f1" fill="1" visible="no" active="yes" locked="no" />
+<layer number="14" name="Route14" blackcolor="0xccc55ea3" whitecolor="0xccc55ea3" coloredcolor="0xccc55ea3" blackhighlight="0xccc50087" whitehighlight="0xccc50087" coloredhighlight="0xccc50087" fill="1" visible="no" active="yes" locked="no" />
+<layer number="15" name="Route15" blackcolor="0xccf56416" whitecolor="0xccf56416" coloredcolor="0xccf56416" blackhighlight="0xccf55200" whitehighlight="0xccf55200" coloredhighlight="0xccf55200" fill="1" visible="no" active="yes" locked="no" />
+<layer number="16" name="Route16" blackcolor="0xcc0696d7" whitecolor="0xcc0696d7" coloredcolor="0xcc0696d7" blackhighlight="0xcc0097d7" whitehighlight="0xcc0097d7" coloredhighlight="0xcc0097d7" fill="1" visible="no" active="yes" locked="no" />
+<layer number="17" name="Pads" blackcolor="0xcc3ddc97" whitecolor="0xcc0dab76" coloredcolor="0xcc0dab76" blackhighlight="0xcc00dc79" whitehighlight="0xcc00ab6f" coloredhighlight="0xcc00ab6f" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="18" name="Vias" blackcolor="0xcc3ddc97" whitecolor="0xcc0dab76" coloredcolor="0xcc0dab76" blackhighlight="0xcc00dc79" whitehighlight="0xcc00ab6f" coloredhighlight="0xcc00ab6f" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="19" name="Unrouted" blackcolor="0xccc8c832" whitecolor="0xbbc8c832" coloredcolor="0xbbc8c832" blackhighlight="0xccc8c800" whitehighlight="0xbbc8c800" coloredhighlight="0xbbc8c800" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="20" name="BoardOutline" blackcolor="0xccffe44c" whitecolor="0xcceec643" coloredcolor="0xcceec643" blackhighlight="0xccffd500" whitehighlight="0xcceeb300" coloredhighlight="0xcceeb300" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="21" name="SilkscreenTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="22" name="SilkscreenBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="23" name="OriginsTop" blackcolor="0xccafd134" whitecolor="0xccafd134" coloredcolor="0xccafd134" blackhighlight="0xcca7d100" whitehighlight="0xcca7d100" coloredhighlight="0xcca7d100" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="24" name="OriginsBottom" blackcolor="0xccafd134" whitecolor="0xccafd134" coloredcolor="0xccafd134" blackhighlight="0xcca7d100" whitehighlight="0xcca7d100" coloredhighlight="0xcca7d100" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="25" name="NamesTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="26" name="NamesBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="27" name="ValuesTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="28" name="ValuesBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="29" name="SolderMaskTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="3" visible="no" active="yes" locked="no" />
+<layer number="30" name="SolderMaskBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="6" visible="no" active="yes" locked="no" />
+<layer number="31" name="StencilTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="4" visible="no" active="yes" locked="no" />
+<layer number="32" name="StencilBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="5" visible="no" active="yes" locked="no" />
+<layer number="33" name="FinishTop" blackcolor="0xccc8c832" whitecolor="0xbbc8c832" coloredcolor="0xbbc8c832" blackhighlight="0xccc8c800" whitehighlight="0xbbc8c800" coloredhighlight="0xbbc8c800" fill="3" visible="no" active="yes" locked="no" />
+<layer number="34" name="FinishBottom" blackcolor="0xccc8c832" whitecolor="0xbbc8c832" coloredcolor="0xbbc8c832" blackhighlight="0xccc8c800" whitehighlight="0xbbc8c800" coloredhighlight="0xbbc8c800" fill="6" visible="no" active="yes" locked="no" />
+<layer number="35" name="GlueTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="4" visible="no" active="yes" locked="no" />
+<layer number="36" name="GlueBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="5" visible="no" active="yes" locked="no" />
+<layer number="37" name="TestTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="no" active="yes" locked="no" />
+<layer number="38" name="TestBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="no" active="yes" locked="no" />
+<layer number="39" name="ComponentExcludeTop" blackcolor="0xccc90d0c" whitecolor="0xccc90d0c" coloredcolor="0xccc90d0c" blackhighlight="0xccc90000" whitehighlight="0xccc90000" coloredhighlight="0xccc90000" fill="11" visible="yes" active="yes" locked="no" />
+<layer number="40" name="ComponentExcludeBottom" blackcolor="0xcc0696d7" whitecolor="0xcc0696d7" coloredcolor="0xcc0696d7" blackhighlight="0xcc0097d7" whitehighlight="0xcc0097d7" coloredhighlight="0xcc0097d7" fill="11" visible="yes" active="yes" locked="no" />
+<layer number="41" name="RestrictCopper" blackcolor="0xccc90d0c" whitecolor="0xccc90d0c" coloredcolor="0xccc90d0c" blackhighlight="0xccc90000" whitehighlight="0xccc90000" coloredhighlight="0xccc90000" fill="10" visible="yes" active="yes" locked="no" />
+<layer number="42" name="RestrictBottom" blackcolor="0xcc0696d7" whitecolor="0xcc0696d7" coloredcolor="0xcc0696d7" blackhighlight="0xcc0097d7" whitehighlight="0xcc0097d7" coloredhighlight="0xcc0097d7" fill="10" visible="yes" active="yes" locked="no" />
+<layer number="43" name="RestrictVias" blackcolor="0xcc3ddc97" whitecolor="0xcc0dab76" coloredcolor="0xcc0dab76" blackhighlight="0xcc00dc79" whitehighlight="0xcc00ab6f" coloredhighlight="0xcc00ab6f" fill="10" visible="yes" active="yes" locked="no" />
+<layer number="44" name="Drills" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="no" active="yes" locked="no" />
+<layer number="45" name="Holes" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="no" active="yes" locked="no" />
+<layer number="46" name="Milling" blackcolor="0xcc32c8c8" whitecolor="0xb432c8c8" coloredcolor="0xb432c8c8" blackhighlight="0xcc00c8c8" whitehighlight="0xb400c8c8" coloredhighlight="0xb400c8c8" fill="1" visible="no" active="yes" locked="no" />
+<layer number="47" name="Measures" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="no" active="yes" locked="no" />
+<layer number="48" name="Document" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="49" name="Reference" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="51" name="DocumentTop" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="52" name="DocumentBottom" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="88" name="SimResults" blackcolor="0xb40000ff" whitecolor="0xcc8252c2" coloredcolor="0xcc8252c2" blackhighlight="0xb40000ff" whitehighlight="0xcc5100c2" coloredhighlight="0xcc5100c2" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="89" name="SimProbes" blackcolor="0xb40000ff" whitecolor="0xcc8252c2" coloredcolor="0xcc8252c2" blackhighlight="0xb40000ff" whitehighlight="0xcc5100c2" coloredhighlight="0xcc5100c2" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="90" name="Modules" blackcolor="0xccffba08" whitecolor="0xccffba08" coloredcolor="0xccffba08" blackhighlight="0xccffb700" whitehighlight="0xccffb700" coloredhighlight="0xccffb700" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="91" name="Nets" blackcolor="0xcc3ddc97" whitecolor="0xcc0dab76" coloredcolor="0xcc0dab76" blackhighlight="0xcc00dc79" whitehighlight="0xcc00ab6f" coloredhighlight="0xcc00ab6f" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="92" name="Busses" blackcolor="0xcc0696d7" whitecolor="0xcc0696d7" coloredcolor="0xcc0696d7" blackhighlight="0xcc0097d7" whitehighlight="0xcc0097d7" coloredhighlight="0xcc0097d7" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="93" name="Pins" blackcolor="0xcc3ddc97" whitecolor="0xcc0dab76" coloredcolor="0xcc0dab76" blackhighlight="0xcc00dc79" whitehighlight="0xcc00ab6f" coloredhighlight="0xcc00ab6f" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="94" name="Symbols" blackcolor="0xccc90d0c" whitecolor="0xccc90d0c" coloredcolor="0xccc90d0c" blackhighlight="0xccc90000" whitehighlight="0xccc90000" coloredhighlight="0xccc90000" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="95" name="Names" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="96" name="Values" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="97" name="Info" blackcolor="0xccc8c8c8" whitecolor="0xbb808080" coloredcolor="0xbb808080" blackhighlight="0xccc8c8c8" whitehighlight="0xbb808080" coloredhighlight="0xbb808080" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="98" name="Guide" blackcolor="0xccc8c832" whitecolor="0xbbc8c832" coloredcolor="0xbbc8c832" blackhighlight="0xccc8c800" whitehighlight="0xbbc8c800" coloredhighlight="0xbbc8c800" fill="1" visible="yes" active="yes" locked="no" />
+<layer number="257" name="Route17" blackcolor="0xc816acac" whitecolor="0xc816acac" coloredcolor="0xc816acac" blackhighlight="0xc800acac" whitehighlight="0xc800acac" coloredhighlight="0xc800acac" fill="1" visible="no" active="yes" locked="no" />
+<layer number="258" name="Route18" blackcolor="0xc84777bf" whitecolor="0xc84777bf" coloredcolor="0xc84777bf" blackhighlight="0xc8004cbf" whitehighlight="0xc8004cbf" coloredhighlight="0xc8004cbf" fill="1" visible="no" active="yes" locked="no" />
+<layer number="259" name="Route19" blackcolor="0xc84f1aa8" whitecolor="0xc84f1aa8" coloredcolor="0xc84f1aa8" blackhighlight="0xc83e00a8" whitehighlight="0xc83e00a8" coloredhighlight="0xc83e00a8" fill="1" visible="no" active="yes" locked="no" />
+<layer number="260" name="Route20" blackcolor="0xc81b9a8c" whitecolor="0xc81b9a8c" coloredcolor="0xc81b9a8c" blackhighlight="0xc8009a88" whitehighlight="0xc8009a88" coloredhighlight="0xc8009a88" fill="1" visible="no" active="yes" locked="no" />
+<layer number="261" name="Route21" blackcolor="0xc89f0e6d" whitecolor="0xc89f0e6d" coloredcolor="0xc89f0e6d" blackhighlight="0xc89f006a" whitehighlight="0xc89f006a" coloredhighlight="0xc89f006a" fill="1" visible="no" active="yes" locked="no" />
+<layer number="262" name="Route22" blackcolor="0xc89118bb" whitecolor="0xc89118bb" coloredcolor="0xc89118bb" blackhighlight="0xc88900bb" whitehighlight="0xc88900bb" coloredhighlight="0xc88900bb" fill="1" visible="no" active="yes" locked="no" />
+<layer number="263" name="Route23" blackcolor="0xc850779a" whitecolor="0xc850779a" coloredcolor="0xc850779a" blackhighlight="0xc800529a" whitehighlight="0xc800529a" coloredhighlight="0xc800529a" fill="1" visible="no" active="yes" locked="no" />
+<layer number="264" name="Route24" blackcolor="0xc8538782" whitecolor="0xc8538782" coloredcolor="0xc8538782" blackhighlight="0xc800877a" whitehighlight="0xc800877a" coloredhighlight="0xc800877a" fill="1" visible="no" active="yes" locked="no" />
+<layer number="265" name="Route25" blackcolor="0xc8917328" whitecolor="0xc8917328" coloredcolor="0xc8917328" blackhighlight="0xc8916600" whitehighlight="0xc8916600" coloredhighlight="0xc8916600" fill="1" visible="no" active="yes" locked="no" />
+<layer number="266" name="Route26" blackcolor="0xc8b83da5" whitecolor="0xc8b83da5" coloredcolor="0xc8b83da5" blackhighlight="0xc8b8009c" whitehighlight="0xc8b8009c" coloredhighlight="0xc8b8009c" fill="1" visible="no" active="yes" locked="no" />
+<layer number="267" name="Route27" blackcolor="0xc8038e4b" whitecolor="0xc8038e4b" coloredcolor="0xc8038e4b" blackhighlight="0xc8008e49" whitehighlight="0xc8008e49" coloredhighlight="0xc8008e49" fill="1" visible="no" active="yes" locked="no" />
+<layer number="268" name="Route28" blackcolor="0xc8de7da6" whitecolor="0xc8de7da6" coloredcolor="0xc8de7da6" blackhighlight="0xc8de0060" whitehighlight="0xc8de0060" coloredhighlight="0xc8de0060" fill="1" visible="no" active="yes" locked="no" />
+<layer number="269" name="Route29" blackcolor="0xc8312f9f" whitecolor="0xc8312f9f" coloredcolor="0xc8312f9f" blackhighlight="0xc803009f" whitehighlight="0xc803009f" coloredhighlight="0xc803009f" fill="1" visible="no" active="yes" locked="no" />
+<layer number="270" name="Route30" blackcolor="0xc89e5723" whitecolor="0xc89e5723" coloredcolor="0xc89e5723" blackhighlight="0xc89e4200" whitehighlight="0xc89e4200" coloredhighlight="0xc89e4200" fill="1" visible="no" active="yes" locked="no" />
+<layer number="271" name="Route31" blackcolor="0xc84394a6" whitecolor="0xc84394a6" coloredcolor="0xc84394a6" blackhighlight="0xc8008aa6" whitehighlight="0xc8008aa6" coloredhighlight="0xc8008aa6" fill="1" visible="no" active="yes" locked="no" />
+<layer number="272" name="Route32" blackcolor="0xcce8c102" whitecolor="0xcce8c102" coloredcolor="0xcce8c102" blackhighlight="0xcce8bd00" whitehighlight="0xcce8bd00" coloredhighlight="0xcce8bd00" fill="1" visible="no" active="yes" locked="no" />
+<layer number="273" name="Route33" blackcolor="0xc86ac347" whitecolor="0xc86ac347" coloredcolor="0xc86ac347" blackhighlight="0xc837c300" whitehighlight="0xc837c300" coloredhighlight="0xc837c300" fill="1" visible="no" active="yes" locked="no" />
+<layer number="274" name="Route34" blackcolor="0xc8eec070" whitecolor="0xc8eec070" coloredcolor="0xc8eec070" blackhighlight="0xc8ee9700" whitehighlight="0xc8ee9700" coloredhighlight="0xc8ee9700" fill="1" visible="no" active="yes" locked="no" />
+<layer number="275" name="Route35" blackcolor="0xc89be191" whitecolor="0xc89be191" coloredcolor="0xc89be191" blackhighlight="0xc81ee100" whitehighlight="0xc81ee100" coloredhighlight="0xc81ee100" fill="1" visible="no" active="yes" locked="no" />
+<layer number="276" name="Route36" blackcolor="0xc87d46db" whitecolor="0xc87d46db" coloredcolor="0xc87d46db" blackhighlight="0xc85000db" whitehighlight="0xc85000db" coloredhighlight="0xc85000db" fill="1" visible="no" active="yes" locked="no" />
+<layer number="277" name="Route37" blackcolor="0xc846a989" whitecolor="0xc846a989" coloredcolor="0xc846a989" blackhighlight="0xc800a971" whitehighlight="0xc800a971" coloredhighlight="0xc800a971" fill="1" visible="no" active="yes" locked="no" />
+<layer number="278" name="Route38" blackcolor="0xc8d975b7" whitecolor="0xc8d975b7" coloredcolor="0xc8d975b7" blackhighlight="0xc8d90091" whitehighlight="0xc8d90091" coloredhighlight="0xc8d90091" fill="1" visible="no" active="yes" locked="no" />
+<layer number="279" name="Route39" blackcolor="0xc850d1e5" whitecolor="0xc850d1e5" coloredcolor="0xc850d1e5" blackhighlight="0xc800c6e5" whitehighlight="0xc800c6e5" coloredhighlight="0xc800c6e5" fill="1" visible="no" active="yes" locked="no" />
+<layer number="280" name="Route40" blackcolor="0xc8d9f6bd" whitecolor="0xc8d9f6bd" coloredcolor="0xc8d9f6bd" blackhighlight="0xc87bf600" whitehighlight="0xc87bf600" coloredhighlight="0xc87bf600" fill="1" visible="no" active="yes" locked="no" />
+<layer number="281" name="Route41" blackcolor="0xc887ceeb" whitecolor="0xc887ceeb" coloredcolor="0xc887ceeb" blackhighlight="0xc800a8eb" whitehighlight="0xc800a8eb" coloredhighlight="0xc800a8eb" fill="1" visible="no" active="yes" locked="no" />
+<layer number="282" name="Route42" blackcolor="0xc8da70d6" whitecolor="0xc8da70d6" coloredcolor="0xc8da70d6" blackhighlight="0xc8da00d3" whitehighlight="0xc8da00d3" coloredhighlight="0xc8da00d3" fill="1" visible="no" active="yes" locked="no" />
+<layer number="283" name="Route43" blackcolor="0xc832cd32" whitecolor="0xc832cd32" coloredcolor="0xc832cd32" blackhighlight="0xc800cd00" whitehighlight="0xc800cd00" coloredhighlight="0xc800cd00" fill="1" visible="no" active="yes" locked="no" />
+<layer number="284" name="Route44" blackcolor="0xc8c2760c" whitecolor="0xc8c2760c" coloredcolor="0xc8c2760c" blackhighlight="0xc8c26e00" whitehighlight="0xc8c26e00" coloredhighlight="0xc8c26e00" fill="1" visible="no" active="yes" locked="no" />
+<layer number="285" name="Route45" blackcolor="0xc82ec6c6" whitecolor="0xc82ec6c6" coloredcolor="0xc82ec6c6" blackhighlight="0xc800c6c6" whitehighlight="0xc800c6c6" coloredhighlight="0xc800c6c6" fill="1" visible="no" active="yes" locked="no" />
+<layer number="286" name="Route46" blackcolor="0xc8eca3d3" whitecolor="0xc8eca3d3" coloredcolor="0xc8eca3d3" blackhighlight="0xc8ec009d" whitehighlight="0xc8ec009d" coloredhighlight="0xc8ec009d" fill="1" visible="no" active="yes" locked="no" />
+<layer number="287" name="Route47" blackcolor="0xc83d4ed2" whitecolor="0xc83d4ed2" coloredcolor="0xc83d4ed2" blackhighlight="0xc80018d2" whitehighlight="0xc80018d2" coloredhighlight="0xc80018d2" fill="1" visible="no" active="yes" locked="no" />
+<layer number="288" name="Route48" blackcolor="0xc89e15d9" whitecolor="0xc89e15d9" coloredcolor="0xc89e15d9" blackhighlight="0xc89400d9" whitehighlight="0xc89400d9" coloredhighlight="0xc89400d9" fill="1" visible="no" active="yes" locked="no" />
+<layer number="289" name="Route49" blackcolor="0xc862dcdc" whitecolor="0xc862dcdc" coloredcolor="0xc862dcdc" blackhighlight="0xc800dcdc" whitehighlight="0xc800dcdc" coloredhighlight="0xc800dcdc" fill="1" visible="no" active="yes" locked="no" />
+<layer number="290" name="Route50" blackcolor="0xc881a7df" whitecolor="0xc881a7df" coloredcolor="0xc881a7df" blackhighlight="0xc8005ddf" whitehighlight="0xc8005ddf" coloredhighlight="0xc8005ddf" fill="1" visible="no" active="yes" locked="no" />
+<layer number="291" name="Route51" blackcolor="0xc8825bc5" whitecolor="0xc8825bc5" coloredcolor="0xc8825bc5" blackhighlight="0xc84800c5" whitehighlight="0xc84800c5" coloredhighlight="0xc84800c5" fill="1" visible="no" active="yes" locked="no" />
+<layer number="292" name="Route52" blackcolor="0xc839dbb8" whitecolor="0xc839dbb8" coloredcolor="0xc839dbb8" blackhighlight="0xc800dbac" whitehighlight="0xc800dbac" coloredhighlight="0xc800dbac" fill="1" visible="no" active="yes" locked="no" />
+<layer number="293" name="Route53" blackcolor="0xc8b84992" whitecolor="0xc8b84992" coloredcolor="0xc8b84992" blackhighlight="0xc8b8007b" whitehighlight="0xc8b8007b" coloredhighlight="0xc8b8007b" fill="1" visible="no" active="yes" locked="no" />
+<layer number="294" name="Route54" blackcolor="0xc8b664d3" whitecolor="0xc8b664d3" coloredcolor="0xc8b664d3" blackhighlight="0xc89b00d3" whitehighlight="0xc89b00d3" coloredhighlight="0xc89b00d3" fill="1" visible="no" active="yes" locked="no" />
+<layer number="295" name="Route55" blackcolor="0xc8c0d983" whitecolor="0xc8c0d983" coloredcolor="0xc8c0d983" blackhighlight="0xc89cd900" whitehighlight="0xc89cd900" coloredhighlight="0xc89cd900" fill="1" visible="no" active="yes" locked="no" />
+<layer number="296" name="Route56" blackcolor="0xc876fbda" whitecolor="0xc876fbda" coloredcolor="0xc876fbda" blackhighlight="0xc800fbbc" whitehighlight="0xc800fbbc" coloredhighlight="0xc800fbbc" fill="1" visible="no" active="yes" locked="no" />
+<layer number="297" name="Route57" blackcolor="0xc8d0b163" whitecolor="0xc8d0b163" coloredcolor="0xc8d0b163" blackhighlight="0xc8d09200" whitehighlight="0xc8d09200" coloredhighlight="0xc8d09200" fill="1" visible="no" active="yes" locked="no" />
+<layer number="298" name="Route58" blackcolor="0xc83369c5" whitecolor="0xc83369c5" coloredcolor="0xc83369c5" blackhighlight="0xc8004cc5" whitehighlight="0xc8004cc5" coloredhighlight="0xc8004cc5" fill="1" visible="no" active="yes" locked="no" />
+<layer number="299" name="Route59" blackcolor="0xc840ad78" whitecolor="0xc840ad78" coloredcolor="0xc840ad78" blackhighlight="0xc800ad57" whitehighlight="0xc800ad57" coloredhighlight="0xc800ad57" fill="1" visible="no" active="yes" locked="no" />
+<layer number="300" name="Route60" blackcolor="0xc8d5397b" whitecolor="0xc8d5397b" coloredcolor="0xc8d5397b" blackhighlight="0xc8d5005c" whitehighlight="0xc8d5005c" coloredhighlight="0xc8d5005c" fill="1" visible="no" active="yes" locked="no" />
+<layer number="301" name="Route61" blackcolor="0xc86462c9" whitecolor="0xc86462c9" coloredcolor="0xc86462c9" blackhighlight="0xc80300c9" whitehighlight="0xc80300c9" coloredhighlight="0xc80300c9" fill="1" visible="no" active="yes" locked="no" />
+<layer number="302" name="Route62" blackcolor="0xc8c68353" whitecolor="0xc8c68353" coloredcolor="0xc8c68353" blackhighlight="0xc8c65200" whitehighlight="0xc8c65200" coloredhighlight="0xc8c65200" fill="1" visible="no" active="yes" locked="no" />
+<layer number="303" name="Route63" blackcolor="0xc881c9d9" whitecolor="0xc881c9d9" coloredcolor="0xc881c9d9" blackhighlight="0xc800b5d9" whitehighlight="0xc800b5d9" coloredhighlight="0xc800b5d9" fill="1" visible="no" active="yes" locked="no" />
+<layer number="304" name="Bottom" blackcolor="0xcc0698d7" whitecolor="0xcc0698d7" coloredcolor="0xcc0698d7" blackhighlight="0xcc0097d7" whitehighlight="0xcc0097d7" coloredhighlight="0xcc0097d7" fill="1" visible="yes" active="yes" locked="no" />
+</layers>
+<library>
+<packages>
+<package name="RGBDIGIT_08&quot;_6PIN" use_placeholder="yes">
+<text x="-10.16" y="5.6" size="1.27" layer="25" ratio="10">&gt;NAME</text><pad name="P$1" x="-7.62" y="2.54" drill="1" diameter="2" />
+<pad name="P$2" x="-7.62" y="0" drill="1" diameter="2" />
+<pad name="P$3" x="-7.62" y="-2.54" drill="1" diameter="2" />
+<pad name="P$4" x="7.62" y="-2.54" drill="1" diameter="2" />
+<pad name="P$5" x="7.62" y="0" drill="1" diameter="2" />
+<pad name="P$6" x="7.62" y="2.54" drill="1" diameter="2" />
+<wire x1="-10.16" y1="5.08" x2="10.16" y2="5.08" width="0.127" layer="21" />
+<wire x1="10.16" y1="5.08" x2="10.16" y2="-22.86" width="0.127" layer="21" />
+<wire x1="10.16" y1="-22.86" x2="-10.16" y2="-22.86" width="0.127" layer="21" />
+<wire x1="-10.16" y1="-22.86" x2="-10.16" y2="5.08" width="0.127" layer="21" />
+<text x="-8.89" y="-11.43" size="2.1844" layer="21">RGBDigit 08"</text>
+<text x="-6.35" y="1.905" size="1.016" layer="21">5V in</text>
+<text x="2.286" y="1.905" size="1.016" layer="21">5V out</text>
+<text x="-6.35" y="-0.635" size="1.016" layer="21">D in</text>
+<text x="2.921" y="-0.635" size="1.016" layer="21">D out</text>
+<text x="-6.35" y="-3.175" size="1.016" layer="21">GND in</text>
+<text x="0.762" y="-3.175" size="1.016" layer="21">GND out</text>
+</package>
+</packages>
+<packages3d>
+<package3d name="RGBDIGIT_08&quot;_3D" urn="" wip_urn="urn:adsk.wipprod:fs.file:vf.-ZXjqybQQi2K5roUMzm3Fw?version=3" locally_modified="yes" type="model" footprint_synced="no">
+<packageinstances>
+<packageinstance name="RGBDIGIT_08&quot;_6PIN" />
+</packageinstances>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="RGBDIGIT_08&quot;_SYMBOL">
+<text x="-7.62" y="-10.4" size="1.778" layer="96" ratio="10">&gt;VALUE</text><text x="-7.62" y="8.4" size="1.778" layer="95" ratio="10">&gt;NAME</text><pin name="V5_OUT" x="25.4" y="5.08" length="middle" direction="pwr" rot="R180" />
+<pin name="D_OUT" x="25.4" y="0" length="middle" direction="out" rot="R180" />
+<pin name="GND_OUT" x="25.4" y="-5.08" length="middle" direction="pwr" rot="R180" />
+<pin name="5V_IN" x="-12.7" y="5.08" length="middle" direction="pwr" />
+<pin name="D_IN" x="-12.7" y="0" length="middle" direction="in" />
+<pin name="GND_IN" x="-12.7" y="-5.08" length="middle" direction="pwr" />
+<wire x1="-7.62" y1="7.62" x2="20.32" y2="7.62" width="0.254" layer="94" />
+<wire x1="20.32" y1="7.62" x2="20.32" y2="-7.62" width="0.254" layer="94" />
+<wire x1="20.32" y1="-7.62" x2="-7.62" y2="-7.62" width="0.254" layer="94" />
+<wire x1="-7.62" y1="-7.62" x2="-7.62" y2="7.62" width="0.254" layer="94" />
+<text x="0" y="10.16" size="1.778" layer="94">RGBDigit 08"</text>
+</symbol>
+</symbols>
+<atts>
+<att name="CATEGORY_L1" />
+<att name="DATASHEET" />
+<att name="MANUFACTURER" />
+<att name="CATEGORY_L2" />
+<att name="MPN" />
+<att name="VALUE" />
+<att name="VENDOR" />
+<att name="VPN" />
+<att name="PACKAGE" />
+</atts>
+<devicesets>
+<deviceset name="RGBDIGIT_08&quot;" prefix="DIGIT" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="RGBDIGIT_08&quot;_SYMBOL" x="0" y="0" />
+</gates>
+<att_values>
+<att_value name="CATEGORY_L1" value="" />
+<att_value name="DATASHEET" value="" />
+<att_value name="MANUFACTURER" value="" />
+<att_value name="CATEGORY_L2" value="" />
+<att_value name="MPN" value="" />
+<att_value name="VALUE" value="" />
+<att_value name="VENDOR" value="" />
+<att_value name="VPN" value="" />
+</att_values>
+<devices>
+<device name="" package="RGBDIGIT_08&quot;_6PIN">
+<connects>
+<connect gate="G$1" pin="5V_IN" pad="P$1" />
+<connect gate="G$1" pin="D_IN" pad="P$2" />
+<connect gate="G$1" pin="D_OUT" pad="P$5" />
+<connect gate="G$1" pin="GND_IN" pad="P$3" />
+<connect gate="G$1" pin="GND_OUT" pad="P$4" />
+<connect gate="G$1" pin="V5_OUT" pad="P$6" />
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.wipprod:fs.file:vf.-ZXjqybQQi2K5roUMzm3Fw?version=3" />
+</package3dinstances>
+<att_values>
+<att_value name="PACKAGE" value="" />
+</att_values>
+<att_sets>
+<att_set name="" />
+</att_sets>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+</drawing>
+<compatibility>
+<note version="8.3" severity="warning">
+Since Version 8.3, EAGLE supports the association of 3D packages
+with devices in libraries, schematics, and board files. Those 3D
+packages will not be understood (or retained) with this version.
+</note>
+</compatibility>
+</eagle>

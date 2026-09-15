@@ -1,0 +1,33 @@
+Designator,Quantity,Value,MPN,Manufacturer,Package,Placement,Notes
+U1,2,1x20 female socket 2.54mm 8.5mm,22850120ANG1SYA01,JILN,THT 2.54mm,Machine,"LCSC C429947, 3A, gold flash. TWO strips into U1's 40 holes. The Pico 2 WH itself is NOT on the assembly — off-the-shelf, plugged in afterwards, JST-SH debug connector on its top face. Delete the 3 debug pads from the footprint"
+U2,1,MiCS-5524,MICS-5524,Amphenol SGX Sensortech,SMD 10-pad 5x7mm,Machine,Pads under the body — not hand-solderable. No-wash instruction on the order
+U3,1,SCD41 CO2 sensor,SCD41-D-R2,Sensirion,SMD 21-pad 10.1x10.1mm,Machine,SCD41 not SCD40 — decided. Centre keep-out must survive the footprint
+U4,1,DS3231 RTC,DS3231SN#,Analog Devices,SOIC-16 wide 300mil,Machine,Not the 8-SOIC DS3231MZ+. Pads 5-13 all tie to GND
+U5,1,SN74HCT125,SN74HCT125DR,Texas Instruments,SO-14,Machine,Level shifter for digit data
+U6,1,BS612 PIR,BS612,Senba,SENSORM-TH_BS612 THT,Hand,LCSC C389589. Hand-solder <=350C for <=3s. No-wash
+U7,1,VEML7700 ambient light,VEML7700-TR,Vishay,LED-SMD_4P 6.8x2.4mm,Machine,LCSC C504893. I2C 0x10. Needs a light-tight collar
+"Q1,Q3",2,MMBT2222A,MMBT2222ALT1G,onsemi,SOT-23-3,Machine,BJT E-B-C — buzzer driver / arcade lamp driver
+Q2,1,AO3400A,AO3400A,Alpha & Omega Semiconductor,SOT-23-3,Machine,MOSFET G-S-D — gas heater low-side switch
+BT1,1,CR1220 holder,2894,Keystone Electronics,SMT locking,Machine,Cell not included — see README
+BZ1,1,Buzzer,QMB-09B-05,,THT Dia9.0,Hand,"Part name unsettled — schematic says QMB-09B-05, docs said UDB-05B, datasheets/ holds CST-951AP"
+DIGIT1-DIGIT4,4,RGBDigit 0.8in,,,THT 19.9x27.6mm,Hand,Front side. Power starred not daisy-chained; data chained 1-2-3-4
+C1,1,1000uF 16V,,,THT radial E5-10.5,Hand,Deliberately THT. Bulk on the 5V rail — confirm MPN and stock
+"C2,C3,C4,C5,C6,C8,C9,C10,C11,C13",10,100nF 50V X7R,GRM21BR71H104KA01L,Murata,0805,Machine,ADC settling / 4x digit / SCD41 / DS3231 / HCT125 / PIR / VEML
+"C7,C12",2,10uF 16V X5R,CL21A106KOQNNNG,Samsung,0805,Machine,SCD41 bulk / PIR filter
+R1,1,470R,RC0805FR-07470RL,Yageo,0805,Machine,Ring data — board end
+R2,1,100R,,Yageo,0805,Machine,PIR supply filter — series from +3V3 into +3V3_PIR
+R3,1,10k 1%,RC0805FR-0710KL,Yageo,0805,Machine,Divider upper leg
+R4,1,15.4k 1%,RC0805FR-0715K4L,Yageo,0805,Machine,Divider lower leg
+"R8,R15",2,1k,RC0805FR-071KL,Yageo,0805,Machine,Q1 base / Q3 base
+R9,1,82R 1%,RC0805FR-0782RL,Yageo,0805,Machine,Heater — value is critical
+R10,1,10k 1%,RC0805FR-0710KL,Yageo,0805,Machine,R_LOAD — sets ADC scaling
+R11,1,100k,RC0805FR-07100KL,Yageo,0805,Machine,Q2 gate pulldown
+"R12,R13",2,4k7,RC0805FR-074K7L,Yageo,0805,Machine,I2C pull-ups — mandatory here, no breakouts bring their own
+"R14,R17",2,0R,,Yageo,0805,Machine,Buzzer volume trim link / PIR ONTIME lower leg (2s minimum)
+"R16,R18",2,1M 1%,,Yageo,0805,Machine,PIR ONTIME upper leg / PIR SENS upper leg
+R19,1,150k 1%,,Yageo,0805,Machine,PIR SENS lower leg — mid-scale sensitivity, tune on the bench
+J1,1,JST XH 2-pin,B2B-XH-A,JST,THT 2.50mm,Hand,USB-C breakout — feeds VSYS and the 5V rail
+"J2,J5",2,JST XH 4-pin,B4B-XH-A,JST,THT 2.50mm,Hand,LCD / arcade button
+"J4,J6,J7",3,JST XH 5-pin,B5B-XH-A,JST,THT 2.50mm,Hand,"Encoder / NeoPixel ring (LCSC C157991) / debug: TX,RX,RUN,GND,3V3 — SWD goes to the Pico's own connector"
+H1-H3,3,M3 mounting hole 3.2mm,,,Unplated,N/A,"Not a purchased part. Three is settled — the fourth corner is the antenna end, and steel there is best avoided"
+FID1-FID6,6,Fiducial 1mm,,,Bare copper,N/A,Not a purchased part. Only needed if the board goes to PCBA

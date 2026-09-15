@@ -1,0 +1,23 @@
+Designator,Quantity,Value,MPN,Manufacturer,Package,Placement,Notes
+U1,1,Raspberry Pi Pico 2 WH,SC1634,Raspberry Pi,THT 40+3 pads,Hand,Socketed in HDR-PICO — verify W vs WH
+U5,1,SN74HCT125,SN74HCT125N,Texas Instruments,PDIP-14,Hand,Socketed — level shifter for digit data
+DIP1,1,14-pin DIP socket 0.3in,ED14DT,On Shore Technology,THT,Hand,Socket for U5
+Q1,1,2N2222A,2N2222A,Diotec Semiconductor,TO-92,Hand,Buzzer driver — E-B-C
+Q3,1,2N2222A,2N2222A,Diotec Semiconductor,TO-92,Hand,Arcade lamp driver — same part as Q1
+R1,1,470R,CF14JT470R,Stackpole,Axial THT,Hand,Ring data — board end
+R3,1,10k 1%,MFR-25FBF52-10K,Yageo,Axial THT,Hand,Divider upper leg
+R4,1,15.4k 1%,MFR-25FBF52-15K4,Yageo,Axial THT,Hand,Divider lower leg
+R8,1,1k,CF14JT1K00,Stackpole,Axial THT,Hand,Q1 base — 470R to 4k7 all work
+R14,1,0R,CD14ZT0R00,Stackpole,Axial THT,Hand,Buzzer volume trim link
+R15,1,1k,CF14JT1K00,Stackpole,Axial THT,Hand,Q3 base — arcade lamp
+C1,1,1000uF 16V,EKYB160ELL102MJ16S,United Chemi-Con,Radial THT,Hand,Bulk cap on 5V rail
+"C2,C3,C8,C9,C10",5,100nF 50V,K104K15X7RF53L2,Vishay BC Components,Radial/leaded THT 2.5mm,Hand,ADC settling / one per RGBDigit
+J1,1,JST XH 2-pin,B2B-XH-A,JST,THT 2.50mm,Hand,USB-C breakout
+"J2,J5",2,JST XH 4-pin,B4B-XH-A,JST,THT 2.50mm,Hand,LCD / arcade button
+"J3,J6",2,JST XH 3-pin,B3B-XH-A,JST,THT 2.50mm,Hand,NeoPixel ring / RGBDigit chain link — J6 only if the split-board option is taken
+J4,1,JST XH 5-pin,B5B-XH-A,JST,THT 2.50mm,Hand,KY-040 encoder
+J7,1,1x3 male header,PREC040SAAN-RC,Sullins,THT 2.54mm,Hand,Debug header — cut from a 40-pos strip
+HDR1,1,1x4 female socket,PPPC361LFBN-RC,Sullins,THT 2.54mm,Hand,Gas breakout (Adafruit 3199) — VIN/GND/EN/AOUT — cut from a 36-pos strip
+HDR2,1,1x7 female socket,PPPC361LFBN-RC,Sullins,THT 2.54mm,Hand,RTC breakout (Adafruit 3013) — VIN/GND/SDA/SCL/SQW/RST/32K — cut from a 36-pos strip
+HDR3,1,female socket — TBD,,,,Hand,"CO2 breakout — pin count/pitch unknown, measure the physical board before ordering"
+HDR-PICO,2,1x20 female socket,PPPC361LFBN-RC,Sullins,THT 2.54mm,Hand,"Pico 2 WH — one strip per row, cut from 36-pos strips"

@@ -1,0 +1,21 @@
+Designator,Quantity,Value,MPN,Manufacturer,Package,Notes
+U2,1,MiCS-5524,MICS-5524,Amphenol SGX Sensortech,SMD 10-pad 5x7mm,Pads under the body. No-wash instruction on the order
+U3,1,SCD41 CO2 sensor,SCD41-D-R2,Sensirion,SMD 21-pad 10.1x10.1mm,Centre keep-out must survive the footprint
+U4,1,DS3231 RTC,DS3231SN#,Analog Devices,SOIC-16 wide 300mil,Not the 8-SOIC DS3231MZ+
+U5,1,SN74HCT125,SN74HCT125DR,Texas Instruments,SO-14,Level shifter for digit data
+U7,1,VEML7700 ambient light,VEML7700-TR,Vishay,LED-SMD_4P 6.8x2.4mm,I2C 0x10
+"Q1,Q3",2,MMBT2222A,MMBT2222ALT1G,onsemi,SOT-23-3,Buzzer driver / arcade lamp driver
+Q2,1,AO3400A,AO3400A,Alpha & Omega Semiconductor,SOT-23-3,Gas heater low-side switch
+"C2,C3,C4,C5,C6,C8,C9,C10,C11,C13",10,100nF 50V X7R,GRM21BR71H104KA01L,Murata,0805,
+"C7,C12",2,10uF 16V X5R,CL21A106KOQNNNG,Samsung,0805,
+R1,1,470R,RC0805FR-07470RL,Yageo,0805,Ring data
+R2,1,100R,RC0805FR-07100RL,Yageo,0805,PIR supply filter — MPN pattern-derived, confirm stock
+"R3,R10",2,10k 1%,RC0805FR-0710KL,Yageo,0805,Divider upper leg / R_LOAD
+R4,1,15.4k 1%,RC0805FR-0715K4L,Yageo,0805,Divider lower leg
+"R8,R15",2,1k,RC0805FR-071KL,Yageo,0805,Q1 base / Q3 base
+R9,1,82R 1%,RC0805FR-0782RL,Yageo,0805,Heater — value is critical
+R11,1,100k,RC0805FR-07100KL,Yageo,0805,Q2 gate pulldown
+"R12,R13",2,4k7,RC0805FR-074K7L,Yageo,0805,I2C pull-ups
+"R14,R17",2,0R,RC0805JR-070RL,Yageo,0805,Buzzer trim link / PIR ONTIME lower leg — MPN pattern-derived, confirm stock
+"R16,R18",2,1M 1%,RC0805FR-071ML,Yageo,0805,PIR ONTIME / SENS upper legs — MPN pattern-derived, confirm stock
+R19,1,150k 1%,RC0805FR-07150KL,Yageo,0805,PIR SENS lower leg — MPN pattern-derived, confirm stock
