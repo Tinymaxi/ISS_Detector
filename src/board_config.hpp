@@ -62,9 +62,9 @@ constexpr uint DIGIT_PIXELS      = DIGIT_COUNT * PIXELS_PER_DIGIT;  // 32
 
 // How many digit modules are actually soldered up right now. Chaining fewer
 // than DIGIT_COUNT is fine — the modules present consume their own data and
-// pass the remainder downstream to nothing. Raise this to DIGIT_COUNT once all
-// four are wired.
-constexpr uint DIGITS_FITTED        = 1;
+// pass the remainder downstream to nothing. The fabricated board carries all
+// four; the Perma-Proto prototype had only one.
+constexpr uint DIGITS_FITTED        = 4;
 constexpr uint DIGIT_PIXELS_FITTED  = DIGITS_FITTED * PIXELS_PER_DIGIT;
 
 // --- I2C: LCD (0x3E + 0x60), SCD40 (0x62) and DS3231 RTC (0x68) ------------
