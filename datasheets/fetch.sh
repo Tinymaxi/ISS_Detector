@@ -44,6 +44,11 @@ get "pico-w.pdf"   "https://datasheets.raspberrypi.com/picow/pico-w-datasheet.pd
 get "scd4x.pdf"    "https://sensirion.com/media/documents/48C4B7FB/67FE0194/CD_DS_SCD4x_Datasheet_D1.pdf"
 get "sht3x.pdf"    "https://sensirion.com/media/documents/213E6A3B/63A5A569/Datasheet_SHT3x_DIS.pdf"
 
+# Vishay serve their own PDFs: 84286 is the datasheet, 84323 the application
+# note with the optical window and cover-glass guidance the datasheet omits.
+get "veml7700.pdf"          "https://www.vishay.com/docs/84286/veml7700.pdf"          "https://www.vishay.com/"
+get "veml7700-design-in.pdf" "https://www.vishay.com/docs/84323/designingveml7700.pdf" "https://www.vishay.com/"
+
 # Maxim/ADI block automated requests; Adafruit mirror it under the 3013 product.
 get "ds3231.pdf"   "https://cdn-shop.adafruit.com/product-files/3013/DS3231.pdf"
 

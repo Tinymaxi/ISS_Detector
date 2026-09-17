@@ -13,6 +13,8 @@ the folder is that the numbers survive.
 | `scd4x.pdf` | Sensirion SCD40/41 | I²C commands, 205 mA pulses, decoupling, Figure 3 package drawing |
 | `scd4x-design-in-guide.pdf` | Sensirion SCD4x Design-In Guide v1.1 | **Housing and placement rules the datasheet does not cover** — dead volume, air turbulence, vibration, sunlight, 30 mV supply-ripple limit, and the four-part design-in sanity check |
 | `sht3x.pdf` | Sensirion SHT3x | The sensor the SCD40 replaced; CRC-8 poly shared with SCD4x |
+| `veml7700.pdf` | Vishay VEML7700 Rev. 1.8 | Ambient light sensor `U7`: pinning 1 SCL / 2 VDD / 3 GND / 4 SDA, I²C 0x10, 0 to 140 klx, ALS gain and integration-time registers |
+| `veml7700-design-in.pdf` | Vishay AN “Designing the VEML7700 Into an Application” | **The window rules the datasheet leaves out** — cover glass transmission, aperture and distance to the sensor, and how to correct the reading for them |
 | `pca9633-backlight.pdf` | NXP PCA9633 | The LCD's RGB backlight — MODE1 wake-up, PWM registers |
 | `ws2812b.pdf` | WorldSemi WS2812B | Ring and digit pixels: timing, GRB order |
 | `rgbdigit.pdf` | RGBDigit 1" 7-segment | **Read the notes below — it changes two build decisions** |
