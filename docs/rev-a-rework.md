@@ -58,8 +58,19 @@ been powered. The symptom is GP21 and GP22 both reading 0 and refusing to be dri
 high, while both nets measure 20 MΩ to GND unpowered — the copper is clean, the part is
 inert and clamping through its protection diodes.
 
-**The fix.** Remove U6 and connect each sensor pin to the pad **of the same name**, with
-six short wires or by crossing the leads in sleeving. The pads, in the board's top view:
+**The fix, option 1: fit it from the other side.** Flipping a through-hole part mirrors
+its lead pattern, and that cancels our mirror exactly — every pin then lands on the pad
+with the right name, with no wires and nothing crossed. Push the leads up through from
+the bottom and solder them on the top. The cost is mechanical: the dome then looks out
+of the **bottom** face, so this only works if the case can give it a view that way.
+
+There is no drop-in part to rescue us instead. `BS412` is a four-pin device in a square
+pattern, and the six-pin Senba sensors all share the BS612 pinout, so none of them has
+the mirrored ring we would need.
+
+**The fix, option 2: wires.** Remove U6 and connect each sensor pin to the pad **of the
+same name**, with six short wires or by crossing the leads in sleeving. The pads, in the
+board's top view:
 
 ```
             6 ONTIME
