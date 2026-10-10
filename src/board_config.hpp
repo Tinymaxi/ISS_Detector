@@ -106,6 +106,13 @@ constexpr uint PIN_BUTTON_LAMP = 20;  // physical 26, via Q3 from the 5 V rail
 // --- Buzzer ----------------------------------------------------------------
 constexpr uint PIN_BUZZER = 9;        // physical 12, PWM
 
+// --- BS612 PIR -------------------------------------------------------------
+// REL goes high while the sensor sees movement; it is a push-pull output, so
+// no pull is needed on our side. OEN enables that output and is simply held
+// high. Sensitivity and hold time are set by the resistors at the sensor.
+constexpr uint PIN_PIR_REL = 21;      // physical 27
+constexpr uint PIN_PIR_OEN = 22;      // physical 29
+
 // --- MiCS-5524 gas sensor --------------------------------------------------
 // EN drives Q2's gate directly: HIGH enables the heater. The Adafruit breakout
 // was the other way round, because it carried its own switching transistor.

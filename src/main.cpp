@@ -20,6 +20,7 @@
 #include "drivers/scd4x.hpp"
 #include "drivers/seven_segment.hpp"
 #include "pico/cyw43_arch.h"
+#include "hardware/gpio.h"
 #include "pico/stdlib.h"
 
 namespace {
@@ -83,6 +84,15 @@ int main() {
     printf("gas: A0 GP%u (ADC%u), EN GP%u, heater on\n", board::PIN_GAS_AO,
            board::GAS_ADC_CHANNEL, board::PIN_GAS_EN);
 
+    // PIR. Nothing to configure at this end: hold OEN high and watch REL.
+    gpio_init(board::PIN_PIR_OEN);
+    gpio_set_dir(board::PIN_PIR_OEN, GPIO_OUT);
+    gpio_put(board::PIN_PIR_OEN, 1);
+    gpio_init(board::PIN_PIR_REL);
+    gpio_set_dir(board::PIN_PIR_REL, GPIO_IN);
+    bool pir_was = false;
+    printf("pir: REL GP%u, OEN GP%u held high\n", board::PIN_PIR_REL, board::PIN_PIR_OEN);
+
     // SCD4x if fitted. Absent is fine — begin() just reports false and the
     // rest of the box carries on, so this build works either side of the swap.
     drivers::Scd4x scd(drivers::i2c_bus());
@@ -114,6 +124,12 @@ int main() {
         button.poll();
         buzzer.update();
         gas.update();
+
+        const bool pir_now = gpio_get(board::PIN_PIR_REL);
+        if (pir_now != pir_was) {
+            pir_was = pir_now;
+            printf("pir: %s\n", pir_now ? "motion" : "clear");
+        }
 
         // Rate-limits itself; true only on the loop where a fresh sample lands.
         // First one arrives about five seconds after start-up.

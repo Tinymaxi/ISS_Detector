@@ -53,7 +53,9 @@ if $do_monitor; then
     # The board re-enumerates after a reset, so wait for the port to reappear.
     port=""
     for _ in $(seq 1 40); do
-        port=$(ls /dev/cu.usbmodem* 2>/dev/null | head -1 || true)
+        # Newest first: after a reset the board's port reappears, and a second
+        # board (or a stale node) must not win just by sorting earlier.
+        port=$(ls -t /dev/cu.usbmodem* 2>/dev/null | head -1 || true)
         [ -n "$port" ] && break
         sleep 0.25
     done

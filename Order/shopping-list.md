@@ -46,6 +46,29 @@ Export: [`LCSC__WM2609160656_20260916214838.csv`](LCSC__WM2609160656_20260916214
   here, and 22 AWG is the heaviest the crimp takes.
 - Board-side crimps per box: 2 + 4 + 4 + 5 + 5 + 5 = **25**.
 
+## Rework for rev A, found at bring-up (2026-10-10)
+
+The full story, both sensors, with the wiring: [`../docs/rev-a-rework.md`](../docs/rev-a-rework.md).
+
+`U7` was fitted as **`VEML7700-TR`, the side-view part**, which senses through its
+upright face. The design needs the window facing away from the board, which is the
+**top-view `VEML7700-TT`**. Both use the same four pads at 1.27 mm pitch — Vishay's land
+patterns differ only in pad length, 1.4 vs 1.6 mm, and ours are 1.8 — so the `-TT`
+drops onto the existing pads with no board change.
+
+The parts fitted are also **180° out**, which clamped the I²C bus through their
+protection diodes and left every sensor unreachable. Both faults go away with the swap.
+
+| Part | Where | Qty |
+|---|---|---|
+| Vishay `VEML7700-TT`, top view | DigiKey `751-VEML7700-TTCT-ND`, CHF 1.27 | 5 boards + spares |
+
+Fit with **pin 1 on the left-hand pad**, the one by the silk dot, going to SCL. Check
+the body clears `C13`: lying flat it is 3 mm deep and there is about 3.5 mm.
+
+For a rev B: specify `-TT` in the BOM, draw the body outline to one side of the pad row
+rather than centred, and add the package to `ROTATION_FIX` in `eda/make-jlc-cpl.py`.
+
 ## Later — once the boards arrive and work
 
 Box one is built from parts already in stock. Only buy for more boxes once a board
